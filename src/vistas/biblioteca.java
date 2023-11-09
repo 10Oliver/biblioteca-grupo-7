@@ -22,7 +22,8 @@ public class biblioteca extends javax.swing.JFrame {
         initComponents();
     }
     
-    private void cambiarVista(JPanel panel) {
+    public void cambiarVista(JPanel panel) {
+        panel.setSize(1030, 640);
         pnlContenedor.removeAll();
         pnlContenedor.add(panel);
         pnlContenedor.revalidate();
@@ -51,6 +52,7 @@ public class biblioteca extends javax.swing.JFrame {
         setTitle("Biblioteca");
         setBackground(new java.awt.Color(0, 0, 0));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setLocation(new java.awt.Point(0, 0));
         setMinimumSize(new java.awt.Dimension(1280, 720));
         setResizable(false);
 
@@ -140,23 +142,21 @@ public class biblioteca extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuariosActionPerformed
         usuario usuario = new usuario();
-        usuario.setSize(1030, 640);
         this.cambiarVista(usuario);
     }//GEN-LAST:event_btnUsuariosActionPerformed
 
     private void btnInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInventarioActionPerformed
-        inventario inventario = new inventario();
-        inventario.setSize(1030, 640);
+        inventario inventario = new inventario(pnlContenedor);
         this.cambiarVista(inventario);
     }//GEN-LAST:event_btnInventarioActionPerformed
 
     private void btnPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrestamoActionPerformed
         prestamo prestamos = new prestamo();
-        prestamos.setSize(1030, 640);
         this.cambiarVista(prestamos);
     }//GEN-LAST:event_btnPrestamoActionPerformed
 
@@ -200,7 +200,7 @@ public class biblioteca extends javax.swing.JFrame {
     private javax.swing.JButton btnPrestamo;
     private javax.swing.JButton btnUsuarios;
     private javax.swing.JLabel lblTitulo;
-    private javax.swing.JPanel pnlContenedor;
+    public javax.swing.JPanel pnlContenedor;
     private javax.swing.JPanel pnlMenu;
     private javax.swing.JPanel pnlTitulo;
     // End of variables declaration//GEN-END:variables

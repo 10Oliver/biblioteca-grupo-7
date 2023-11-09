@@ -5,19 +5,38 @@
  */
 package vistas;
 
+import javax.swing.JPanel;
+import componentes.buscarProducto;
+import componentes.*;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
+
+
 /**
  *
  * @author Oliver
  */
 public class inventario extends javax.swing.JPanel {
-
+   private JPanel inventario;
+    
     /**
      * Creates new form inventario
      */
-    public inventario() {
+    public inventario(JPanel panelPrincipal) {
+        inventario = panelPrincipal;
         initComponents();
     }
 
+    
+    private void cambiarVista(JPanel panel) {
+        panel.setSize(1030, 640);
+        inventario.removeAll();
+        inventario.add(panel);
+        inventario.revalidate();
+        inventario.repaint();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,34 +46,129 @@ public class inventario extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        btnIngresar = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(1030, 640));
         setMinimumSize(new java.awt.Dimension(1030, 640));
 
-        jLabel1.setText("Inventario");
+        btnIngresar.setText("Ingresar producto");
+        btnIngresar.setPreferredSize(new java.awt.Dimension(300, 75));
+        btnIngresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIngresarActionPerformed(evt);
+            }
+        });
+
+        btnBuscar.setText("Buscar producto");
+        btnBuscar.setToolTipText("");
+        btnBuscar.setPreferredSize(new java.awt.Dimension(300, 75));
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(467, 467, 467)
-                .addComponent(jLabel1)
-                .addContainerGap(506, Short.MAX_VALUE))
+                .addGap(137, 137, 137)
+                .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(125, 125, 125)
+                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(168, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(237, 237, 237)
-                .addComponent(jLabel1)
-                .addContainerGap(387, Short.MAX_VALUE))
+                .addGap(251, 251, 251)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(314, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
+        JPanel eleccionProducto = new JPanel();
+        eleccionProducto.setLayout(new BoxLayout(eleccionProducto, BoxLayout.Y_AXIS));
+        JRadioButton eBook = new JRadioButton("E-Book.");
+        JRadioButton libro = new JRadioButton("Libro.");
+        JRadioButton periodico = new JRadioButton("Periodico.");
+        JRadioButton tesis = new JRadioButton("Tesis.");
+        JRadioButton pelicula = new JRadioButton("Pelicula.");
+        JRadioButton cd = new JRadioButton("CD.");
+        JRadioButton revista = new JRadioButton("Revista.");
+        ButtonGroup grupoRadio = new ButtonGroup();
+        grupoRadio.add(eBook);
+        grupoRadio.add(libro);
+        grupoRadio.add(periodico);
+        grupoRadio.add(tesis);
+        grupoRadio.add(pelicula);
+        grupoRadio.add(cd);
+        grupoRadio.add(revista);
+        eleccionProducto.add(eBook);
+        eleccionProducto.add(libro);
+        eleccionProducto.add(periodico);
+        eleccionProducto.add(tesis);
+        eleccionProducto.add(pelicula);
+        eleccionProducto.add(cd);
+        eleccionProducto.add(revista);
+        int result = JOptionPane.showConfirmDialog(null, eleccionProducto, "Tipo de producto que desea agregar", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            if (eBook.isSelected()) {
+                agregarCD panelCd = new agregarCD();
+                this.cambiarVista(panelCd);
+                return;
+            }
+            if (libro.isSelected()) {
+                agregarLibro panelLibro = new agregarLibro();
+                this.cambiarVista(panelLibro);
+                return;
+            }
+            if (periodico.isSelected()) {
+                agregarPeriodico panelPeriodico = new agregarPeriodico();
+                this.cambiarVista(panelPeriodico);
+                return;
+            }
+            if (tesis.isSelected()) {
+                agregarTesis panelTesis = new agregarTesis();
+                this.cambiarVista(panelTesis);
+                return;
+            }
+            if (pelicula.isSelected()) {
+                agregarPelicula panelPelicula = new agregarPelicula();
+                this.cambiarVista(panelPelicula);
+                return;
+            }
+            if (cd.isSelected()) {
+                agregarCD panelCd = new agregarCD();
+                this.cambiarVista(panelCd);
+                return;
+            }
+            if (revista.isSelected()) {
+                agregarRevista panelRevista = new agregarRevista();
+                this.cambiarVista(panelRevista);
+                return;
+            }
+        }
+    }//GEN-LAST:event_btnIngresarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        buscarProducto buscar = new buscarProducto();
+        buscar.setSize(1030, 640);
+        this.inventario.removeAll();
+        this.inventario.add(buscar);
+        this.inventario.revalidate();
+        this.inventario.repaint();
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnIngresar;
     // End of variables declaration//GEN-END:variables
 }
