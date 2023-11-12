@@ -5,8 +5,6 @@
  */
 package componentes;
 
-import javax.swing.table.DefaultTableModel;
-
 /**
  *
  * @author Oliver
@@ -125,14 +123,7 @@ public class buscarProducto extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         String opcion = jComboBox1.getSelectedItem().toString();
-        String datobuscar = txt1.getText();
-        
-        System.out.println( opcion);
-        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
-            modelo.setRowCount(0);
-            
-            
-        
+        String datobuscar = txt1.getText();        
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
