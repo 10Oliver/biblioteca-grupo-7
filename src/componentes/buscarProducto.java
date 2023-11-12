@@ -5,6 +5,8 @@
  */
 package componentes;
 
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Oliver
@@ -126,6 +128,11 @@ public class buscarProducto extends javax.swing.JPanel {
         String datobuscar = txt1.getText();
         
         System.out.println( opcion);
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+            modelo.setRowCount(0);
+            
+            
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
