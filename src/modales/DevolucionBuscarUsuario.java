@@ -26,7 +26,6 @@ public class DevolucionBuscarUsuario extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         pnlTitulo = new javax.swing.JPanel();
         lblTitulo = new javax.swing.JLabel();
@@ -50,6 +49,7 @@ public class DevolucionBuscarUsuario extends javax.swing.JPanel {
         pnlTitulo.setPreferredSize(new java.awt.Dimension(500, 80));
         pnlTitulo.setLayout(new java.awt.GridBagLayout());
 
+        lblTitulo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblTitulo.setText("Búsca por el nombre de usuario");
         pnlTitulo.add(lblTitulo, new java.awt.GridBagConstraints());
 

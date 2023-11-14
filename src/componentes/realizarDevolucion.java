@@ -4,6 +4,9 @@
  * and open the template in the editor.
  */
 package componentes;
+import javax.swing.JFrame;
+import modales.DevolucionBuscarCodigo;
+import modales.DevolucionBuscarUsuario;
 
 /**
  *
@@ -55,10 +58,16 @@ public class realizarDevolucion extends javax.swing.JPanel {
 
         btnNombreUsuario.setText("Buscar por usuario");
         btnNombreUsuario.setPreferredSize(new java.awt.Dimension(150, 50));
+        btnNombreUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNombreUsuarioActionPerformed(evt);
+            }
+        });
 
         jButton1.setText("Buscar por ticket");
         jButton1.setPreferredSize(new java.awt.Dimension(150, 50));
 
+        pnlDetalleContenido.setBackground(new java.awt.Color(255, 255, 255));
         pnlDetalleContenido.setLayout(new java.awt.GridBagLayout());
 
         jScrollPane1.setMinimumSize(new java.awt.Dimension(500, 300));
@@ -77,6 +86,8 @@ public class realizarDevolucion extends javax.swing.JPanel {
         jScrollPane1.setViewportView(tblContenido);
 
         pnlDetalleContenido.add(jScrollPane1, new java.awt.GridBagConstraints());
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         lblTotal.setText("Total de productos prestados:");
 
@@ -133,7 +144,7 @@ public class realizarDevolucion extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(117, 117, 117)
                         .addComponent(btnRegistar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(128, Short.MAX_VALUE))
+                .addContainerGap(93, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,7 +187,8 @@ public class realizarDevolucion extends javax.swing.JPanel {
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(pnlDetalleContenido, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35))
             .addGroup(layout.createSequentialGroup()
                 .addGap(195, 195, 195)
                 .addComponent(btnNombreUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -195,16 +207,26 @@ public class realizarDevolucion extends javax.swing.JPanel {
                         .addComponent(jLabel2)
                         .addGap(112, 112, 112)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(pnlDetalleContenido, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pnlDetalleContenido, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(62, 62, 62)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnNombreUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnNombreUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNombreUsuarioActionPerformed
+        DevolucionBuscarUsuario buscarUsuario = new DevolucionBuscarUsuario();
+        buscarUsuario.setSize(600, 700);
+        JFrame modal = new JFrame();
+        modal.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        modal.add(buscarUsuario);
+        modal.pack();
+        modal.setVisible(true);
+    }//GEN-LAST:event_btnNombreUsuarioActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -48,6 +48,7 @@ public class DevolucionBuscarCodigo extends javax.swing.JPanel {
         pnlTitulo.setPreferredSize(new java.awt.Dimension(600, 80));
         pnlTitulo.setLayout(new java.awt.GridBagLayout());
 
+        lblTitulo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblTitulo.setText("Buscar por código del préstamo");
         pnlTitulo.add(lblTitulo, new java.awt.GridBagConstraints());
 

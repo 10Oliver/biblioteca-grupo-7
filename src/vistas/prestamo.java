@@ -5,17 +5,30 @@
  */
 package vistas;
 
+import javax.swing.JPanel;
+import componentes.realizarDevolucion;
+import componentes.realizarPrestamo;
+
 /**
  *
  * @author Oliver
  */
 public class prestamo extends javax.swing.JPanel {
-
+    private JPanel contenedor;
     /**
      * Creates new form prestamos
      */
-    public prestamo() {
+    public prestamo(JPanel mainPanel) {
+        this.contenedor = mainPanel;
         initComponents();
+    }
+    
+    private void mostrarVentana(JPanel vista) {
+        vista.setSize(1030, 640);
+        this.contenedor.removeAll();
+        this.contenedor.add(vista);
+        this.contenedor.revalidate();
+        this.contenedor.repaint();
     }
 
     /**
@@ -34,6 +47,7 @@ public class prestamo extends javax.swing.JPanel {
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(1030, 640));
         setMinimumSize(new java.awt.Dimension(1030, 640));
+        setPreferredSize(new java.awt.Dimension(1030, 640));
         setLayout(new java.awt.GridBagLayout());
 
         btnPrestamo.setText("Préstamo");
@@ -49,14 +63,25 @@ public class prestamo extends javax.swing.JPanel {
 
         btnDevoluciones.setText("Devoluciones");
         btnDevoluciones.setPreferredSize(new java.awt.Dimension(300, 75));
+        btnDevoluciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDevolucionesActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
         add(btnDevoluciones, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrestamoActionPerformed
-        // TODO add your handling code here:
+        realizarPrestamo prestamo = new realizarPrestamo();
+        this.mostrarVentana(prestamo);
     }//GEN-LAST:event_btnPrestamoActionPerformed
+
+    private void btnDevolucionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevolucionesActionPerformed
+        realizarDevolucion devolucion = new realizarDevolucion();
+        this.mostrarVentana(devolucion);
+    }//GEN-LAST:event_btnDevolucionesActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
