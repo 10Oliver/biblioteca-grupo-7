@@ -5,6 +5,7 @@
  */
 package componentes;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import modales.DevolucionBuscarCodigo;
 import modales.DevolucionBuscarUsuario;
 
@@ -21,6 +22,14 @@ public class realizarDevolucion extends javax.swing.JPanel {
         initComponents();
     }
 
+    private void desplegarModal(JPanel vista) {
+        vista.setSize(600, 700);
+        JFrame modal = new JFrame();
+        modal.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        modal.add(vista);
+        modal.pack();
+        modal.setVisible(true);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -66,6 +75,11 @@ public class realizarDevolucion extends javax.swing.JPanel {
 
         jButton1.setText("Buscar por ticket");
         jButton1.setPreferredSize(new java.awt.Dimension(150, 50));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         pnlDetalleContenido.setBackground(new java.awt.Color(255, 255, 255));
         pnlDetalleContenido.setLayout(new java.awt.GridBagLayout());
@@ -220,13 +234,13 @@ public class realizarDevolucion extends javax.swing.JPanel {
 
     private void btnNombreUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNombreUsuarioActionPerformed
         DevolucionBuscarUsuario buscarUsuario = new DevolucionBuscarUsuario();
-        buscarUsuario.setSize(600, 700);
-        JFrame modal = new JFrame();
-        modal.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        modal.add(buscarUsuario);
-        modal.pack();
-        modal.setVisible(true);
+        this.desplegarModal(buscarUsuario);
     }//GEN-LAST:event_btnNombreUsuarioActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        DevolucionBuscarCodigo buscarCodigo = new DevolucionBuscarCodigo();
+        this.desplegarModal(buscarCodigo);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

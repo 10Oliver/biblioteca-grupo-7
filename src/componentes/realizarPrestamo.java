@@ -5,17 +5,42 @@
  */
 package componentes;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author Oliver
  */
 public class realizarPrestamo extends javax.swing.JPanel {
 
+    private Map<String, Integer> tipoProductoMap = new HashMap<>();
+
     /**
      * Creates new form prestamo
      */
     public realizarPrestamo() {
         initComponents();
+        this.cargarHashMap();
+        this.cargarTipoProducto();
+    }
+
+    private void cargarHashMap() {
+        this.tipoProductoMap.put("Libro", 1);
+        this.tipoProductoMap.put("Periodico", 2);
+        this.tipoProductoMap.put("Revista", 3);
+        this.tipoProductoMap.put("Tesis", 4);
+        this.tipoProductoMap.put("CD", 5);
+        this.tipoProductoMap.put("EBook", 6);
+        this.tipoProductoMap.put("Pelicula", 7);
+    }
+
+    private void cargarTipoProducto() {
+        cmbTipoProducto.removeAllItems();
+        for (String nombreProducto : tipoProductoMap.keySet()) {
+            cmbTipoProducto.addItem(nombreProducto);
+        }
+
     }
 
     /**

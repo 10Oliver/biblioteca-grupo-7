@@ -46,6 +46,7 @@ public class biblioteca extends javax.swing.JFrame {
         btnUsuarios = new javax.swing.JButton();
         btnInventario = new javax.swing.JButton();
         btnPrestamo = new javax.swing.JButton();
+        btnConfiguraciones = new javax.swing.JButton();
         pnlContenedor = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -107,6 +108,22 @@ public class biblioteca extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
         pnlMenu.add(btnPrestamo, gridBagConstraints);
 
+        btnConfiguraciones.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        btnConfiguraciones.setText("Configuraciones");
+        btnConfiguraciones.setMaximumSize(new java.awt.Dimension(250, 50));
+        btnConfiguraciones.setMinimumSize(new java.awt.Dimension(250, 50));
+        btnConfiguraciones.setPreferredSize(new java.awt.Dimension(250, 50));
+        btnConfiguraciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfiguracionesActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
+        pnlMenu.add(btnConfiguraciones, gridBagConstraints);
+
         pnlContenedor.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout pnlContenedorLayout = new javax.swing.GroupLayout(pnlContenedor);
@@ -160,6 +177,11 @@ public class biblioteca extends javax.swing.JFrame {
         this.cambiarVista(prestamos);
     }//GEN-LAST:event_btnPrestamoActionPerformed
 
+    private void btnConfiguracionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfiguracionesActionPerformed
+        configuraciones config = new configuraciones();
+        this.cambiarVista(config);
+    }//GEN-LAST:event_btnConfiguracionesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -196,6 +218,7 @@ public class biblioteca extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnConfiguraciones;
     private javax.swing.JButton btnInventario;
     private javax.swing.JButton btnPrestamo;
     private javax.swing.JButton btnUsuarios;
