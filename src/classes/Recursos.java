@@ -18,6 +18,12 @@ private int id;
         this.stock = stock;
         this.nombreEstante = nombreEstante;
     }
+    public Recursos(String titulo, Date fechaPublicacion, int stock, String nombreEstante) {
+        this.titulo = titulo;
+        this.fechaPublicacion = fechaPublicacion;
+        this.stock = stock;
+        this.nombreEstante = nombreEstante;
+    }
     public Recursos(){
 
     }

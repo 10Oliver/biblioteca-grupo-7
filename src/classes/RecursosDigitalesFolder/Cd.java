@@ -9,22 +9,26 @@ import java.util.List;
 
 import classes.RecursosDigitales;
 import classes.Conexion.ConnectionDb;
-// import classes.RecursosFisicosFolder.ResultSet;
-// import classes.RecursosFisicosFolder.SQLException;
+
 
 
 public class Cd extends RecursosDigitales {
     private String autor;
     private String numCanciones;
 
-    private String UPDATE_STATEMENT = "UPDATE Cds SET Titulo = ?, Autor = ?, NumCanciones = ?, Genero = ?, FechaPublicacion = ?, Stock = ?, idEstante = ? WHERE id = ?;";
+    private String UPDATE_STATEMENT = "UPDATE Cds SET Titulo = ?, Autor = ?, NumCanciones = ?, Genero = ?, FechaPublicacion = ?, Stock = ?, idEstante = ? WHERE CodigoIdentificacion = ?;";
     private String INSERT_STATEMENT = "INSERT INTO Cds (Titulo, Autor, NumCanciones, Genero, FechaPublicacion, Stock, idEstante) VALUES (?, ?, ?, ?, ?, ?, ?);";
     private String DELETE_STATEMENT = "DELETE FROM Cds WHERE CodigoIdentificacion = ?;";
-    private String SELECT_SINGLE_STATEMENT = "SELECT * FROM Cds WHERE id = ?";
-    private String SELECT_ALL_STATEMENT = "SELECT * FROM Cds";
+    private String SELECT_SINGLE_STATEMENT = "SELECT Cds.id, Cds.CodigoIdentificacion, Cds.Titulo, Cds.Autor, Cds.NumCanciones, Cds.Genero, Cds.FechaPublicacion, Cds.Stock, Estantes.NombreEstante FROM Cds LEFT JOIN Estantes ON Cds.idEstante = Estantes.id WHERE Cds.CodigoIdentificacion = ?";
+    private String SELECT_ALL_STATEMENT = "SELECT Cds.id, Cds.CodigoIdentificacion, Cds.Titulo, Cds.Autor, Cds.NumCanciones, Cds.Genero, Cds.FechaPublicacion, Cds.Stock, Estantes.NombreEstante FROM Cds LEFT JOIN Estantes ON Cds.idEstante = Estantes.id";
 
     public Cd(int id, String codigoIdentificacion, String titulo, Date fechaPublicacion, int stock, String nombreEstante, String genero, String autor, String numCanciones) {
         super(id, codigoIdentificacion, titulo, fechaPublicacion, stock, nombreEstante, genero);
+        this.autor = autor;
+        this.numCanciones = numCanciones;
+    }
+    public Cd(String titulo, Date fechaPublicacion, int stock, String nombreEstante, String genero, String autor, String numCanciones) {
+        super(titulo, fechaPublicacion, stock, nombreEstante, genero);
         this.autor = autor;
         this.numCanciones = numCanciones;
     }
@@ -148,8 +152,28 @@ public List<Cd> selectAllCds(ConnectionDb connection) {
 }
 
 private Cd mapResultSetToCdWithEstante(ResultSet resultSet) throws SQLException {
+    int id = resultSet.getInt("id");
+    String codigo = resultSet.getString("CodigoIdentificacion");
+    String titulo = resultSet.getString("Titulo");
+    Date fecha = resultSet.getDate("FechaPublicacion");
+    int stock = resultSet.getInt("Stock");
+    String estante = resultSet.getString("NombreEstante");
+    String genero = resultSet.getString("Genero");
+    String autor = resultSet.getString("Autor");
+    String numCanciones = resultSet.getString("NumCanciones");
+
+    setId(id);
+    setCodigoIdentificacion(codigo);
+    setTitulo(titulo);
+    setFechaPublicacion(fecha);
+    setStock(stock);
+    setNombreEstante(estante);
+    setGenero(genero);
+    setAutor(autor);
+    setNumCanciones(numCanciones);
     return new Cd(
-    resultSet.getInt("id"),resultSet.getString("CodigoIdentificacion"),resultSet.getString("Titulo"),resultSet.getDate("FechaPublicacion"),resultSet.getInt("Stock"),resultSet.getString("NombreEstante"),resultSet.getString("Genero"),resultSet.getString("Autor"),resultSet.getString("NumCanciones")
+//    resultSet.getInt("id"),resultSet.getString("CodigoIdentificacion"),resultSet.getString("Titulo"),resultSet.getDate("FechaPublicacion"),resultSet.getInt("Stock"),resultSet.getString("NombreEstante"),resultSet.getString("Genero"),resultSet.getString("Autor"),resultSet.getString("NumCanciones")
+            id,codigo,titulo,fecha,stock,estante,genero,autor,numCanciones
     );
 }
 

@@ -20,14 +20,25 @@ public class Libro extends RecursosFisicos {
     private String idioma;
     private String notas;
 
-    private String UPDATE_STATEMENT = "UPDATE Libros SET Titulo = ?, Autor = ?, Editorial = ?, NumeroPaginas = ?, ISBN = ?, Edicion = ?, LugarPublicacion = ?, FechaPublicacion = ?, Genero = ?, Idioma = ?, Notas = ?, Stock = ?, idEstante = ? WHERE id = ?;";
-    private String INSERT_STATEMENT = "INSERT INTO Libros (Titulo, Autor, Editorial, NumeroPaginas, ISBN, Edicion, LugarPublicacion, FechaPublicacion, Genero, Idioma, Notas, Stock, idEstante) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    private String UPDATE_STATEMENT = "UPDATE Libros SET Titulo = ?, Autor = ?, Editorial = ?, NumeroPaginas = ?, ISBN = ?, Edicion = ?, LugarPublicacion = ?, FechaPublicacion = ?, Genero = ?, Idioma = ?, Notas = ?, Stock = ?, idEstante = ? WHERE CodigoIdentificacion = ?;";
+    private String INSERT_STATEMENT = "INSERT INTO Libros (Titulo, Autor, Editorial, NumeroPaginas, ISBN, Edicion, LugarPublicacion, FechaPublicacion, Genero, Idioma, Notas, Stock, idEstante) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private String DELETE_STATEMENT = "DELETE FROM Libros WHERE CodigoIdentificacion = ?;";
-    private String SELECT_SINGLE_STATEMENT = "SELECT * FROM Libros WHERE id = ?";
-    private String SELECT_ALL_STATEMENT = "SELECT * FROM Libros";
+    private String SELECT_SINGLE_STATEMENT = "SELECT Libros.id, Libros.CodigoIdentificacion, Libros.Titulo, Libros.Autor, Libros.Editorial, Libros.NumeroPaginas, Libros.ISBN, Libros.Edicion, Libros.LugarPublicacion, Libros.FechaPublicacion, Libros.Genero, Libros.Idioma, Libros.Notas, Libros.Stock, Estantes.NombreEstante FROM Libros LEFT JOIN Estantes ON Libros.idEstante = Estantes.id WHERE Libros.CodigoIdentificacion = ?;";
+    private String SELECT_ALL_STATEMENT = "SELECT Libros.id, Libros.CodigoIdentificacion, Libros.Titulo, Libros.Autor, Libros.Editorial, Libros.NumeroPaginas, Libros.ISBN, Libros.Edicion, Libros.LugarPublicacion, Libros.FechaPublicacion, Libros.Genero, Libros.Idioma, Libros.Notas, Libros.Stock, Estantes.NombreEstante FROM Libros LEFT JOIN Estantes ON Libros.idEstante = Estantes.id";
 
     public Libro(int id, String codigoIdentificacion, String titulo, Date fechaPublicacion, int stock, String nombreEstante, int numeroPaginas, String autor, String editorial, int isbn, String edicion, String lugarPublicacion, String genero, String idioma, String notas) {
         super(id, codigoIdentificacion, titulo, fechaPublicacion, stock, nombreEstante, numeroPaginas);
+        this.autor = autor;
+        this.editorial = editorial;
+        this.isbn = isbn;
+        this.edicion = edicion;
+        this.lugarPublicacion = lugarPublicacion;
+        this.genero = genero;
+        this.idioma = idioma;
+        this.notas = notas;
+    }
+    public Libro(String titulo, Date fechaPublicacion, int stock, String nombreEstante, int numeroPaginas, String autor, String editorial, int isbn, String edicion, String lugarPublicacion, String genero, String idioma, String notas) {
+        super(titulo, fechaPublicacion, stock, nombreEstante, numeroPaginas);
         this.autor = autor;
         this.editorial = editorial;
         this.isbn = isbn;
