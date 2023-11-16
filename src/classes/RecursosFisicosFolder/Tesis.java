@@ -18,14 +18,22 @@ public class Tesis extends RecursosFisicos {
     private String facultad;
 
     //queries
-    private String UPDATE_STATEMENT = "UPDATE Tesis SET Titulo = ?, Autor = ?, FechaPublicacion = ?, NumeroPaginas = ?, Editorial = ?, NivelAcademico = ?, InstitucionAcademica = ?, Facultad = ?, Stock = ?, idEstante = ? WHERE id = ?;";
+    private String UPDATE_STATEMENT = "UPDATE Tesis SET Titulo = ?, Autor = ?, FechaPublicacion = ?, NumeroPaginas = ?, Editorial = ?, NivelAcademico = ?, InstitucionAcademica = ?, Facultad = ?, Stock = ?, idEstante = ? WHERE CodigoIdentificacion = ?;";
     private String INSERT_STATEMENT = "INSERT INTO Tesis (Titulo, Autor, FechaPublicacion, NumeroPaginas, Editorial, NivelAcademico, InstitucionAcademica, Facultad, Stock, idEstante) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private String DELETE_STATEMENT = "DELETE FROM Tesis WHERE CodigoIdentificacion = ?;";
-    private String SELECT_SINGLE_STATEMENT = "SELECT * FROM Tesis WHERE id = ?";
-    private String SELECT_ALL_STATEMENT = "SELECT * FROM Tesis";
+    private String SELECT_SINGLE_STATEMENT = "SELECT Tesis.id, Tesis.CodigoIdentificacion, Tesis.Titulo, Tesis.Autor, Tesis.FechaPublicacion, Tesis.NumeroPaginas, Tesis.Editorial, Tesis.NivelAcademico, Tesis.InstitucionAcademica, Tesis.Facultad, Tesis.Stock, Estantes.NombreEstante FROM Tesis LEFT JOIN Estantes ON Tesis.idEstante = Estantes.id WHERE Tesis.CodigoIdentificacion = ?;";
+    private String SELECT_ALL_STATEMENT = "SELECT Tesis.id, Tesis.CodigoIdentificacion, Tesis.Titulo, Tesis.Autor, Tesis.FechaPublicacion, Tesis.NumeroPaginas, Tesis.Editorial, Tesis.NivelAcademico, Tesis.InstitucionAcademica, Tesis.Facultad, Tesis.Stock, Estantes.NombreEstante FROM Tesis LEFT JOIN Estantes ON Tesis.idEstante = Estantes.id";
 
     public Tesis(int id, String codigoIdentificacion, String titulo, Date fechaPublicacion, int stock, String nombreEstante, int numeroPaginas, String autor, String editorial, String nivelAcademico, String institucionAcademica, String facultad) {
         super(id, codigoIdentificacion, titulo, fechaPublicacion, stock, nombreEstante, numeroPaginas);
+        this.autor = autor;
+        this.editorial = editorial;
+        this.nivelAcademico = nivelAcademico;
+        this.institucionAcademica = institucionAcademica;
+        this.facultad = facultad;
+    }
+    public Tesis(String titulo, Date fechaPublicacion, int stock, String nombreEstante, int numeroPaginas, String autor, String editorial, String nivelAcademico, String institucionAcademica, String facultad) {
+        super(titulo, fechaPublicacion, stock, nombreEstante, numeroPaginas);
         this.autor = autor;
         this.editorial = editorial;
         this.nivelAcademico = nivelAcademico;
@@ -152,7 +160,6 @@ public void insertTesis(ConnectionDb connection) {
     try {
         int index = 1;
         PreparedStatement statement = connection.getConnection().prepareStatement(INSERT_STATEMENT);
-        statement.setString(index++, getCodigoIdentificacion());
         statement.setString(index++, getTitulo());
         statement.setString(index++, getAutor());
         statement.setDate(index++, getFechaPublicacion());

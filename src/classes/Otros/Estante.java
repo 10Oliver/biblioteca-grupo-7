@@ -31,4 +31,23 @@ public class Estante {
     public void setNombreEstante(String nombreEstante) {
         this.nombreEstante = nombreEstante;
     }
+    public List<Estante> selectAllEstantes(ConnectionDb connection) {
+        List<Estante> estantes = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.getConnection().prepareStatement(selectAllEstantes);
+            ResultSet resultSet = statement.executeQuery();
+    
+            while (resultSet.next()) {
+                // Map ResultSet to Cd
+                setId(resultSet.getInt("id"));
+                setNombreEstante(resultSet.getString("NombreEstante"));
+                Estante estante = new Estante(getId(),getNombreEstante());
+                estantes.add(estante);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred while selecting all Cds: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return estantes;
+    }
 }
