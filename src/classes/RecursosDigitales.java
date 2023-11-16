@@ -9,6 +9,10 @@ public class RecursosDigitales extends Recursos {
         super(id, codigoIdentificacion, titulo, fechaPublicacion, stock, nombreEstante);
         this.genero = genero;
     }
+    public RecursosDigitales(String titulo, Date fechaPublicacion, int stock, String nombreEstante, String genero) {
+        super(titulo, fechaPublicacion, stock, nombreEstante);
+        this.genero = genero;
+    }
     public RecursosDigitales(){
 
     }

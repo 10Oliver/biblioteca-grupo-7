@@ -31,4 +31,23 @@ public class Rol {
     public void setNombreRol(String nombreRol) {
         this.nombreRol = nombreRol;
     }
+    public List<Rol> selectAllRols(ConnectionDb connection) {
+        List<Rol> roles = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.getConnection().prepareStatement(selectAllRoles);
+            ResultSet resultSet = statement.executeQuery();
+    
+            while (resultSet.next()) {
+                // Map ResultSet to Cd
+                setId(resultSet.getInt("id"));
+                setNombreRol(resultSet.getString("NombreRol"));
+                Rol rol = new Rol(getId(),getNombreRol());
+                roles.add(rol);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred while selecting all Cds: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return roles;
+    }
 }

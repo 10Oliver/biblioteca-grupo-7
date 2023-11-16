@@ -1,5 +1,6 @@
 package classes.RecursosDigitalesFolder;
 
+
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,14 +22,26 @@ public class Ebook extends RecursosDigitales {
     private String idioma;
     private String notas;
 
-    private String UPDATE_STATEMENT = "UPDATE Ebooks SET Titulo = ? Autor = ? Editorial = ? NumeroPaginas = ? URL = ? ISBN = ? Edicion = ? LugarPublicacion = ? FechaPublicacion = ? Genero = ? Idioma = ? Notas = ? Stock = ? idEstante = ? WHERE CodigoIdentificacion = ?;";
+    private String UPDATE_STATEMENT = "UPDATE Ebooks SET Titulo = ?, Autor = ?, Editorial = ?, NumeroPaginas = ?, URL = ?, ISBN = ?, Edicion = ?, LugarPublicacion = ?, FechaPublicacion = ?, Genero = ?, Idioma = ?, Notas = ?, Stock = ?, idEstante = ? WHERE CodigoIdentificacion = ?;";
     private String INSERT_STATEMENT = "INSERT INTO Ebooks (Titulo, Autor, Editorial, NumeroPaginas, URL, ISBN, Edicion, LugarPublicacion, FechaPublicacion, Genero, Idioma, Notas, Stock, idEstante) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private String DELETE_STATEMENT =  "DELETE FROM Ebooks WHERE CodigoIdentificacion = ?;";
-    private String SELECT_SINGLE_STATEMENT = "SELECT Ebooks.*, Estantes.NombreEstante FROM Ebooks JOIN Estantes ON Ebooks.idEstante = Estantes.id WHERE Ebooks.CodigoIdentificacion = ?";
-    private String SELECT_ALL_STATEMENT = "SELECT Ebooks.*, Estantes.NombreEstante FROM Ebooks JOIN Estantes ON Ebooks.idEstante = Estantes.id";
+    private String SELECT_SINGLE_STATEMENT = "SELECT Ebooks.id, Ebooks.CodigoIdentificacion, Ebooks.Titulo, Ebooks.Autor, Ebooks.Editorial, Ebooks.NumeroPaginas, Ebooks.URL, Ebooks.ISBN, Ebooks.Edicion, Ebooks.LugarPublicacion, Ebooks.FechaPublicacion, Ebooks.Genero, Ebooks.Idioma, Ebooks.Notas, Ebooks.Stock, Estantes.NombreEstante FROM Ebooks LEFT JOIN Estantes ON Ebooks.idEstante = Estantes.id WHERE Ebooks.CodigoIdentificacion = ?;";
+    private String SELECT_ALL_STATEMENT = "SELECT Ebooks.id, Ebooks.CodigoIdentificacion, Ebooks.Titulo, Ebooks.Autor, Ebooks.Editorial, Ebooks.NumeroPaginas, Ebooks.URL, Ebooks.ISBN, Ebooks.Edicion, Ebooks.LugarPublicacion, Ebooks.FechaPublicacion, Ebooks.Genero, Ebooks.Idioma, Ebooks.Notas, Ebooks.Stock, Estantes.NombreEstante FROM Ebooks LEFT JOIN Estantes ON Ebooks.idEstante = Estantes.id;";
 
     public Ebook(int id, String codigoIdentificacion, String titulo, Date fechaPublicacion, int stock, String nombreEstante, String genero, String autor, String editorial, String numeroPaginas, String url, int isbn, String edicion, String lugarPublicacion, String idioma, String notas) {
         super(id, codigoIdentificacion, titulo, fechaPublicacion, stock, nombreEstante, genero);
+        this.autor = autor;
+        this.editorial = editorial;
+        this.numeroPaginas = numeroPaginas;
+        this.url = url;
+        this.isbn = isbn;
+        this.edicion = edicion;
+        this.lugarPublicacion = lugarPublicacion;
+        this.idioma = idioma;
+        this.notas = notas;
+    }
+    public Ebook(String titulo, Date fechaPublicacion, int stock, String nombreEstante, String genero, String autor, String editorial, String numeroPaginas, String url, int isbn, String edicion, String lugarPublicacion, String idioma, String notas) {
+        super(titulo, fechaPublicacion, stock, nombreEstante, genero);
         this.autor = autor;
         this.editorial = editorial;
         this.numeroPaginas = numeroPaginas;
@@ -202,7 +215,7 @@ public Ebook selectEbook(ConnectionDb connection) {
             setTitulo(resultSet.getString("Titulo"));
             setFechaPublicacion(resultSet.getDate("FechaPublicacion"));
             setStock(resultSet.getInt("Stock"));
-            setNombreEstante(resultSet.getString("idEstante"));
+            setNombreEstante(resultSet.getString("NombreEstante"));
             setGenero(resultSet.getString("Genero"));
             setAutor(resultSet.getString("Autor"));
             setEditorial(resultSet.getString("Editorial"));

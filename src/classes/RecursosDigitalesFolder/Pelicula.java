@@ -17,14 +17,21 @@ public class Pelicula extends RecursosDigitales {
     private String duracion;
     private String productor;
     private String paisCiudad;
-    private String UPDATE_STATEMENT = "UPDATE Peliculas SET Titulo = ?, Director = ?, Duracion = ?, Tipo = ?, Productor = ?, PaisCiudad = ?, FechaPublicacion = ?, Stock = ?, idEstante = ? WHERE id = ?;";
+    private String UPDATE_STATEMENT = "UPDATE Peliculas SET Titulo = ?, Director = ?, Duracion = ?, Tipo = ?, Productor = ?, PaisCiudad = ?, FechaPublicacion = ?, Stock = ?, idEstante = ? WHERE CodigoIdentificacion = ?;";
     private String INSERT_STATEMENT = "INSERT INTO Peliculas (Titulo, Director, Duracion, Tipo, Productor, PaisCiudad, FechaPublicacion, Stock, idEstante) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private String DELETE_STATEMENT = "DELETE FROM Peliculas WHERE CodigoIdentificacion = ?;";
-    private String SELECT_SINGLE_STATEMENT = "SELECT * FROM Peliculas WHERE id = ?";
-    private String SELECT_ALL_STATEMENT = "SELECT * FROM Peliculas";
+    private String SELECT_SINGLE_STATEMENT = "SELECT Peliculas.id, Peliculas.CodigoIdentificacion, Peliculas.Titulo, Peliculas.Director, Peliculas.Duracion, Peliculas.Tipo, Peliculas.Productor, Peliculas.PaisCiudad, Peliculas.FechaPublicacion, Peliculas.Stock, Estantes.NombreEstante FROM Peliculas LEFT JOIN Estantes ON Peliculas.idEstante = Estantes.id WHERE Peliculas.CodigoIdentificacion = ?;";
+    private String SELECT_ALL_STATEMENT = "SELECT Peliculas.id, Peliculas.CodigoIdentificacion, Peliculas.Titulo, Peliculas.Director, Peliculas.Duracion, Peliculas.Tipo, Peliculas.Productor, Peliculas.PaisCiudad, Peliculas.FechaPublicacion, Peliculas.Stock, Estantes.NombreEstante FROM Peliculas LEFT JOIN Estantes ON Peliculas.idEstante = Estantes.id";
 
     public Pelicula(int id, String codigoIdentificacion, String titulo, Date fechaPublicacion, int stock, String nombreEstante, String genero, String director, String duracion, String productor, String paisCiudad) {
         super(id, codigoIdentificacion, titulo, fechaPublicacion, stock, nombreEstante, genero);
+        this.director = director;
+        this.duracion = duracion;
+        this.productor = productor;
+        this.paisCiudad = paisCiudad;
+    }
+    public Pelicula(String titulo, Date fechaPublicacion, int stock, String nombreEstante, String genero, String director, String duracion, String productor, String paisCiudad) {
+        super(titulo, fechaPublicacion, stock, nombreEstante, genero);
         this.director = director;
         this.duracion = duracion;
         this.productor = productor;
