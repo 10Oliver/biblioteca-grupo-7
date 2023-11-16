@@ -156,7 +156,7 @@ public class biblioteca extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInventarioActionPerformed
 
     private void btnPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrestamoActionPerformed
-        prestamo prestamos = new prestamo();
+        prestamo prestamos = new prestamo(pnlContenedor);
         this.cambiarVista(prestamos);
     }//GEN-LAST:event_btnPrestamoActionPerformed
 

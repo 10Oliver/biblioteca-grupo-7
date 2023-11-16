@@ -5,17 +5,30 @@
  */
 package vistas;
 
+import javax.swing.JPanel;
+import componentes.realizarDevolucion;
+import componentes.realizarPrestamo;
+
 /**
  *
  * @author Oliver
  */
 public class prestamo extends javax.swing.JPanel {
-
+    private JPanel contenedor;
     /**
      * Creates new form prestamos
      */
-    public prestamo() {
+    public prestamo(JPanel mainPanel) {
+        this.contenedor = mainPanel;
         initComponents();
+    }
+    
+    private void mostrarVentana(JPanel vista) {
+        vista.setSize(1030, 640);
+        this.contenedor.removeAll();
+        this.contenedor.add(vista);
+        this.contenedor.revalidate();
+        this.contenedor.repaint();
     }
 
     /**
@@ -26,35 +39,53 @@ public class prestamo extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        jLabel1 = new javax.swing.JLabel();
+        btnPrestamo = new javax.swing.JButton();
+        btnDevoluciones = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMaximumSize(new java.awt.Dimension(1030, 640));
         setMinimumSize(new java.awt.Dimension(1030, 640));
+        setPreferredSize(new java.awt.Dimension(1030, 640));
+        setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setText("Préstamos");
+        btnPrestamo.setText("Préstamo");
+        btnPrestamo.setPreferredSize(new java.awt.Dimension(300, 75));
+        btnPrestamo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrestamoActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 30);
+        add(btnPrestamo, gridBagConstraints);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(396, 396, 396)
-                .addComponent(jLabel1)
-                .addContainerGap(574, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(133, 133, 133)
-                .addComponent(jLabel1)
-                .addContainerGap(491, Short.MAX_VALUE))
-        );
+        btnDevoluciones.setText("Devoluciones");
+        btnDevoluciones.setPreferredSize(new java.awt.Dimension(300, 75));
+        btnDevoluciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDevolucionesActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.insets = new java.awt.Insets(0, 30, 0, 0);
+        add(btnDevoluciones, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrestamoActionPerformed
+        realizarPrestamo prestamo = new realizarPrestamo();
+        this.mostrarVentana(prestamo);
+    }//GEN-LAST:event_btnPrestamoActionPerformed
+
+    private void btnDevolucionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevolucionesActionPerformed
+        realizarDevolucion devolucion = new realizarDevolucion();
+        this.mostrarVentana(devolucion);
+    }//GEN-LAST:event_btnDevolucionesActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton btnDevoluciones;
+    private javax.swing.JButton btnPrestamo;
     // End of variables declaration//GEN-END:variables
 }
