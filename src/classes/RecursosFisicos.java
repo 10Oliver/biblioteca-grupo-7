@@ -9,6 +9,10 @@ public class RecursosFisicos extends Recursos {
         super(id, codigoIdentificacion, titulo, fechaPublicacion, stock, nombreEstante);
         this.numeroPaginas = numeroPaginas;
     }
+    public RecursosFisicos(String titulo, Date fechaPublicacion, int stock, String nombreEstante, int numeroPaginas) {
+        super(titulo, fechaPublicacion, stock, nombreEstante);
+        this.numeroPaginas = numeroPaginas;
+    }
     public RecursosFisicos(){
 
     }

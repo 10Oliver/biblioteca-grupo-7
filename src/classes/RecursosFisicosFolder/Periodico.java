@@ -14,14 +14,19 @@ public class Periodico extends RecursosFisicos {
     private String nombrePeriodico;
     private String lugarPublicacion;
 
-    private String UPDATE_STATEMENT = "UPDATE Periodicos SET Titulo = ?, NombrePeriodico = ?, FechaPublicacion = ?, NumeroPaginas = ?, LugarPublicacion = ?, Stock = ?, idEstante = ? WHERE id = ?;";
+    private String UPDATE_STATEMENT = "UPDATE Periodicos SET Titulo = ?, NombrePeriodico = ?, FechaPublicacion = ?, NumeroPaginas = ?, LugarPublicacion = ?, Stock = ?, idEstante = ? WHERE CodigoIdentificacion = ?;";
     private String INSERT_STATEMENT = "INSERT INTO Periodicos (Titulo, NombrePeriodico, FechaPublicacion, NumeroPaginas, LugarPublicacion, Stock, idEstante) VALUES (?, ?, ?, ?, ?, ?, ?);";
     private String DELETE_STATEMENT = "DELETE FROM Periodicos WHERE CodigoIdentificacion = ?;";
-    private String SELECT_SINGLE_STATEMENT = "SELECT * FROM Periodicos WHERE id = ?";
-    private String SELECT_ALL_STATEMENT = "SELECT * FROM Periodicos";
+    private String SELECT_SINGLE_STATEMENT = "SELECT Periodicos.id, Periodicos.CodigoIdentificacion, Periodicos.Titulo, Periodicos.NombrePeriodico, Periodicos.FechaPublicacion, Periodicos.NumeroPaginas, Periodicos.LugarPublicacion, Periodicos.Stock, Estantes.NombreEstante FROM Periodicos LEFT JOIN Estantes ON Periodicos.idEstante = Estantes.id WHERE Periodicos.CodigoIdentificacion = ?;";
+    private String SELECT_ALL_STATEMENT = "SELECT Periodicos.id, Periodicos.CodigoIdentificacion, Periodicos.Titulo, Periodicos.NombrePeriodico, Periodicos.FechaPublicacion, Periodicos.NumeroPaginas, Periodicos.LugarPublicacion, Periodicos.Stock, Estantes.NombreEstante FROM Periodicos LEFT JOIN Estantes ON Periodicos.idEstante = Estantes.id";
 
     public Periodico(int id, String codigoIdentificacion, String titulo, Date fechaPublicacion, int stock, String nombreEstante, int numeroPaginas, String nombrePeriodico, String lugarPublicacion) {
         super(id, codigoIdentificacion, titulo, fechaPublicacion, stock, nombreEstante, numeroPaginas);
+        this.nombrePeriodico = nombrePeriodico;
+        this.lugarPublicacion = lugarPublicacion;
+    }
+    public Periodico(String titulo, Date fechaPublicacion, int stock, String nombreEstante, int numeroPaginas, String nombrePeriodico, String lugarPublicacion) {
+        super(titulo, fechaPublicacion, stock, nombreEstante, numeroPaginas);
         this.nombrePeriodico = nombrePeriodico;
         this.lugarPublicacion = lugarPublicacion;
     }
@@ -145,7 +150,7 @@ public void updatePeriodico(ConnectionDb connection) {
         statement.setString(index++, getLugarPublicacion());
         statement.setInt(index++, getStock());
         statement.setInt(index++, Integer.parseInt(getNombreEstante()));
-        statement.setInt(index++, getId());
+        statement.setString(index++, getCodigoIdentificacion());
         int rowsUpdated = statement.executeUpdate();
         if (rowsUpdated > 0) {
             System.out.println("Periodico was updated successfully!");

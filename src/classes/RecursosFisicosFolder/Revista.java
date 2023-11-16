@@ -18,14 +18,23 @@ public class Revista extends RecursosFisicos {
     private String notas;
     private String editorial;
 
-    private String UPDATE_STATEMENT = "UPDATE Revistas SET Titulo = ?, Autor = ?, NumeroPaginas = ?, ISBN = ?, Editorial = ?, Periodicidad = ?, FechaPublicacion = ?, PaisCiudad = ?, Notas = ?, Stock = ?, idEstante = ? WHERE id = ?;";
+    private String UPDATE_STATEMENT = "UPDATE Revistas SET Titulo = ?, Autor = ?, NumeroPaginas = ?, ISBN = ?, Editorial = ?, Periodicidad = ?, FechaPublicacion = ?, PaisCiudad = ?, Notas = ?, Stock = ?, idEstante = ? WHERE CodigoIdentificacion = ?;";
     private String INSERT_STATEMENT = "INSERT INTO Revistas (Titulo, Autor, NumeroPaginas, ISBN, Editorial, Periodicidad, FechaPublicacion, PaisCiudad, Notas, Stock, idEstante) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private String DELETE_STATEMENT = "DELETE FROM Revistas WHERE CodigoIdentificacion = ?;";
-    private String SELECT_SINGLE_STATEMENT = "SELECT * FROM Revistas WHERE id = ?";
-    private String SELECT_ALL_STATEMENT = "SELECT * FROM Revistas";
+    private String SELECT_SINGLE_STATEMENT = "SELECT Revistas.id, Revistas.CodigoIdentificacion, Revistas.Titulo, Revistas.Autor, Revistas.NumeroPaginas, Revistas.ISBN, Revistas.Editorial, Revistas.Periodicidad, Revistas.FechaPublicacion, Revistas.PaisCiudad, Revistas.Notas, Revistas.Stock, Estantes.NombreEstante FROM Revistas LEFT JOIN Estantes ON Revistas.idEstante = Estantes.id WHERE Revistas.CodigoIdentificacion = ?";
+    private String SELECT_ALL_STATEMENT = "SELECT Revistas.id, Revistas.CodigoIdentificacion, Revistas.Titulo, Revistas.Autor, Revistas.NumeroPaginas, Revistas.ISBN, Revistas.Editorial, Revistas.Periodicidad, Revistas.FechaPublicacion, Revistas.PaisCiudad, Revistas.Notas, Revistas.Stock, Estantes.NombreEstante FROM Revistas LEFT JOIN Estantes ON Revistas.idEstante = Estantes.id";
 
     public Revista(int id, String codigoIdentificacion, String titulo, Date fechaPublicacion, int stock, String nombreEstante, int numeroPaginas, String autor, int isbn, String periodicidad, String paisCiudad, String notas, String editorial) {
         super(id, codigoIdentificacion, titulo, fechaPublicacion, stock, nombreEstante, numeroPaginas);
+        this.autor = autor;
+        this.isbn = isbn;
+        this.periodicidad = periodicidad;
+        this.paisCiudad = paisCiudad;
+        this.notas = notas;
+        this.editorial = editorial;
+    }
+    public Revista(String titulo, Date fechaPublicacion, int stock, String nombreEstante, int numeroPaginas, String autor, int isbn, String periodicidad, String paisCiudad, String notas, String editorial) {
+        super(titulo, fechaPublicacion, stock, nombreEstante, numeroPaginas);
         this.autor = autor;
         this.isbn = isbn;
         this.periodicidad = periodicidad;
@@ -194,20 +203,36 @@ public List<Revista> selectAllRevistas(ConnectionDb connection) {
 }
 
 private Revista mapResultSetToRevistaWithEstante(ResultSet resultSet) throws SQLException {
+        int id = resultSet.getInt("id");
+        String codigo = resultSet.getString("CodigoIdentificacion");
+        String titulo = resultSet.getString("Titulo");
+        Date fecha = resultSet.getDate("FechaPublicacion");
+        int stock = resultSet.getInt("Stock");
+        String estante = resultSet.getString("NombreEstante");
+        int numPaginas = resultSet.getInt("NumeroPaginas");
+        String autor = resultSet.getString("Autor");
+        int isbn = resultSet.getInt("ISBN");
+        String periodicidad = resultSet.getString("Periodicidad");
+        String paisCiudad = resultSet.getString("PaisCiudad");
+        String notas = resultSet.getString("Notas");
+        String editorial = resultSet.getString("Editorial");
+
+        setId(id);
+        setCodigoIdentificacion(codigo);
+        setTitulo(titulo);
+        setFechaPublicacion(fecha);
+        setStock(stock);
+        setNombreEstante(estante);
+        setNumeroPaginas(numPaginas);
+        setAutor(autor);
+        setIsbn(isbn);
+        setPeriodicidad(periodicidad);
+        setPaisCiudad(paisCiudad);
+        setNotas(notas);
+        setEditorial(editorial);
+
     return new Revista(
-            resultSet.getInt("id"),
-            resultSet.getString("CodigoIdentificacion"),
-            resultSet.getString("Titulo"),
-            resultSet.getDate("FechaPublicacion"),
-            resultSet.getInt("Stock"),
-            resultSet.getString("NombreEstante"),
-            resultSet.getInt("NumeroPaginas"),
-            resultSet.getString("Autor"),
-            resultSet.getInt("ISBN"),
-            resultSet.getString("Periodicidad"),
-            resultSet.getString("PaisCiudad"),
-            resultSet.getString("Notas"),
-            resultSet.getString("Editorial")
+            id,codigo,titulo,fecha,stock,estante,numPaginas,autor,isbn,periodicidad,paisCiudad,notas,editorial
     );
 }
 
