@@ -274,3 +274,33 @@ VALUES ('Profesor');
 
 INSERT INTO Roles (NombreRol)
 VALUES ('Alumno');
+
+INSERT INTO Estantes (NombreEstante)
+VALUES ('Ficción General');
+
+INSERT INTO Estantes (NombreEstante)
+VALUES ('No Ficción');
+
+INSERT INTO Estantes (NombreEstante)
+VALUES ('Historia');
+
+INSERT INTO Estantes (NombreEstante)
+VALUES ('Ciencia');
+
+INSERT INTO Estantes (NombreEstante)
+VALUES ('Arte y Literatura');
+
+INSERT INTO Estantes (NombreEstante)
+VALUES ('Tecnología');
+
+INSERT INTO Estantes (NombreEstante)
+VALUES ('Ciencia Ficción y Fantasía');
+
+INSERT INTO Estantes (NombreEstante)
+VALUES ('Biografías');
+
+INSERT INTO Estantes (NombreEstante)
+VALUES ('Infantil');
+
+INSERT INTO Estantes (NombreEstante)
+VALUES ('Juvenil');
