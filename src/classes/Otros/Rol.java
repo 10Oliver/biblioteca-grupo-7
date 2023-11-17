@@ -1,5 +1,11 @@
 package classes.Otros;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import classes.Conexion.ConnectionDb;
 public class Rol {
     private int id;
     private String nombreRol;
@@ -36,7 +42,7 @@ public class Rol {
         try {
             PreparedStatement statement = connection.getConnection().prepareStatement(selectAllRoles);
             ResultSet resultSet = statement.executeQuery();
-    
+
             while (resultSet.next()) {
                 // Map ResultSet to Cd
                 setId(resultSet.getInt("id"));
