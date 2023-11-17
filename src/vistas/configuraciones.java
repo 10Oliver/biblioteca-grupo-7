@@ -5,19 +5,47 @@
  */
 package vistas;
 
+import classes.Otros.ParametroMora;
+
+import classes.Otros.Rol;
+import classes.Conexion.ConnectionDb;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  *
  * @author Oliver
  */
 public class configuraciones extends javax.swing.JPanel {
-
+    private ConnectionDb con = new ConnectionDb();
+    private Rol rol = new Rol(1, "");
+    private List<Rol> roles;
+    private Map<String, Integer> tipoRoles = new HashMap<>();
+    
     /**
      * Creates new form configuraciones
      */
     public configuraciones() {
         initComponents();
+        this.cargarRoles();
     }
 
+    private void cargarRoles() {
+        this.roles = rol.selectAllRols(con);
+        cmbRol.removeAllItems();
+        for (Rol rolItem : roles) {
+            cmbRol.addItem(rolItem.getNombreRol());
+            tipoRoles.put(rolItem.getNombreRol(), rolItem.getId());
+        }
+    }
+    
+    private void leerConfiguracion() {
+
+    }
+    
+    private void actualizarConfiguracion() {
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -30,8 +58,6 @@ public class configuraciones extends javax.swing.JPanel {
         lblTitulo = new javax.swing.JLabel();
         pnlLimite = new javax.swing.JPanel();
         lblTituloLiite = new javax.swing.JLabel();
-        lblLimiteEstudiantes = new javax.swing.JLabel();
-        txtLimiteEstudiantes = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         lblLimiteProfesores = new javax.swing.JLabel();
         txtLimiteProfesores = new javax.swing.JTextField();
@@ -41,6 +67,11 @@ public class configuraciones extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         txtMoraAnual = new javax.swing.JTextField();
         btnGuardar = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        lblTituloRol = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JSeparator();
+        lblIndicacionRol = new javax.swing.JLabel();
+        cmbRol = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(1030, 640));
@@ -54,11 +85,7 @@ public class configuraciones extends javax.swing.JPanel {
         lblTituloLiite.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         lblTituloLiite.setText("Limite de productos por préstamo");
 
-        lblLimiteEstudiantes.setText("Limite para estudiantes:");
-
-        txtLimiteEstudiantes.setText("0");
-
-        lblLimiteProfesores.setText("Limite para los profesores");
+        lblLimiteProfesores.setText("Limite del productos para el usuario seleccionado");
 
         txtLimiteProfesores.setText("0");
 
@@ -68,14 +95,16 @@ public class configuraciones extends javax.swing.JPanel {
             pnlLimiteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1)
             .addGroup(pnlLimiteLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(pnlLimiteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblTituloLiite)
-                    .addComponent(lblLimiteEstudiantes)
-                    .addComponent(txtLimiteEstudiantes)
-                    .addComponent(lblLimiteProfesores)
-                    .addComponent(txtLimiteProfesores, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE))
-                .addContainerGap(116, Short.MAX_VALUE))
+                .addGroup(pnlLimiteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlLimiteLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lblTituloLiite))
+                    .addGroup(pnlLimiteLayout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addGroup(pnlLimiteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblLimiteProfesores)
+                            .addComponent(txtLimiteProfesores, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
         pnlLimiteLayout.setVerticalGroup(
             pnlLimiteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -85,14 +114,10 @@ public class configuraciones extends javax.swing.JPanel {
                 .addGap(8, 8, 8)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(lblLimiteEstudiantes)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtLimiteEstudiantes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48)
                 .addComponent(lblLimiteProfesores)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(txtLimiteProfesores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(74, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -133,7 +158,7 @@ public class configuraciones extends javax.swing.JPanel {
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(txtMoraAnual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -141,56 +166,109 @@ public class configuraciones extends javax.swing.JPanel {
         btnGuardar.setText("Guardar configuración");
         btnGuardar.setMinimumSize(new java.awt.Dimension(200, 50));
         btnGuardar.setPreferredSize(new java.awt.Dimension(200, 50));
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        lblTituloRol.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        lblTituloRol.setText("Selección del rol a configurar");
+
+        lblIndicacionRol.setText("Selecciona el rol al que se le aplicarán las configuraciones");
+
+        cmbRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparator3)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblTituloRol)
+                    .addComponent(lblIndicacionRol, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmbRol, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(125, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblTituloRol)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblIndicacionRol)
+                .addGap(18, 18, 18)
+                .addComponent(cmbRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(85, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(pnlLimite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36))
-            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(404, 404, 404)
+                        .addGap(462, 462, 462)
+                        .addComponent(lblTitulo))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(398, 398, 398)
                         .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(462, 462, 462)
-                        .addComponent(lblTitulo)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(29, 29, 29)
+                        .addComponent(pnlLimite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(282, 282, 282)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblTitulo)
-                .addGap(60, 60, 60)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnlLimite, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
+                .addGap(63, 63, 63)
                 .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(107, 107, 107))
+                .addGap(30, 30, 30))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JComboBox<String> cmbRol;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JLabel lblLimiteEstudiantes;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JLabel lblIndicacionRol;
     private javax.swing.JLabel lblLimiteProfesores;
     private javax.swing.JLabel lblMora;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JLabel lblTituloLiite;
+    private javax.swing.JLabel lblTituloRol;
     private javax.swing.JPanel pnlLimite;
-    private javax.swing.JTextField txtLimiteEstudiantes;
     private javax.swing.JTextField txtLimiteProfesores;
     private javax.swing.JTextField txtMoraAnual;
     // End of variables declaration//GEN-END:variables
