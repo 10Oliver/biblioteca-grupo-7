@@ -1,6 +1,15 @@
 package classes.Otros;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
+
+import classes.Conexion.ConnectionDb;
+
 
 public class Prestamo {
     private int id;
@@ -26,6 +35,9 @@ public class Prestamo {
         this.fechaDevolucionReal = fechaDevolucionReal;
         this.mora = mora;
         this.codigoEjemplar = codigoEjemplar;
+    }
+    public Prestamo(int idUsuario,String codigoEjemplar){
+
     }
 
     public int getId() {
@@ -89,25 +101,25 @@ public class Prestamo {
             prestamoStatement.setInt(1, idPrestamo);
             prestamoStatement.setString(2, codigoEjemplar);
             ResultSet prestamoResult = prestamoStatement.executeQuery();
-    
+
             if (prestamoResult.next()) {
                 return prestamoResult.getDate("FechaDevolucionReal");
             }
         }
         throw new SQLException("No se pudo encontrar el préstamo.");
     }
-    
+
     public void procesarDevolucion(ConnectionDb connection, int idPrestamo, String codigoEjemplar) {
         try {
             Date fechaDevolucionReal = obtenerFechaDevolucionReal(connection, idPrestamo, codigoEjemplar);
-    
+
             if (fechaDevolucionReal != null && fechaDevolucionReal.after(new Date())) {
                 // ... (cálculo de mora)
                 float moraTotal = calcularMora(fechaDevolucionReal);
-    
+
                 // Actualizar la mora en la tabla Prestamos
                 actualizarMora(connection, idPrestamo, codigoEjemplar, moraTotal);
-    
+
                 System.out.println("Devolución con mora calculada: " + moraTotal);
             } else {
                 System.out.println("Devolución realizada a tiempo.");
@@ -117,22 +129,22 @@ public class Prestamo {
             // Manejar el error
         }
     }
-    
+
     private float calcularMora(Date fechaDevolucionReal) {
         // ... (lógica de cálculo de mora)
         Date fechaActual = new Date();
-    
+
         // Calcular la diferencia en días entre la fecha de devolución real y la fecha actual
         long diasRetraso = ChronoUnit.DAYS.between(fechaDevolucionReal.toInstant(), fechaActual.toInstant());
-    
+
         float moraDiariaPorAño = 0.5f;
-    
+
         // Calcular la mora total
         float moraTotal = (diasRetraso / 365) * moraDiariaPorAño;
-    
+
         return moraTotal;
     }
-    
+
     private void actualizarMora(ConnectionDb connection, int idPrestamo, String codigoEjemplar, float moraTotal) throws SQLException {
         String updateMoraQuery = "UPDATE Prestamos SET Mora = ? WHERE id = ? AND CodigoEjemplar = ?";
         try (PreparedStatement updateMoraStatement = connection.getConnection().prepareStatement(updateMoraQuery)) {
@@ -142,7 +154,33 @@ public class Prestamo {
             updateMoraStatement.executeUpdate();
         }
     }
-    
+
+        public void crearPrestamo(ConnectionDb connection) {
+        try {
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String formattedDate = dateFormat.format(currentDate);
+
+            String insertQuery = "INSERT INTO Prestamos (idUsuario, FechaPrestamo, CodigoEjemplar) VALUES (?, ?, ?)";
+            try (PreparedStatement preparedStatement = connection.getConnection().prepareStatement(insertQuery)) {
+                preparedStatement.setInt(1, getIdUsuario());
+                preparedStatement.setString(2, formattedDate);
+                preparedStatement.setString(3, getCodigoEjemplar());
+
+                // Execute the insert query
+                int rowsInserted = preparedStatement.executeUpdate();
+
+                if (rowsInserted > 0) {
+                    System.out.println("New Prestamo created successfully!");
+                } else {
+                    System.out.println("Failed to create new Prestamo. Check your input values.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void procesarVariosPrestamos(List<String> codigosEjemplar)
     {
         ConnectionDb connection = new ConnectionDb();
@@ -170,14 +208,14 @@ public class Prestamo {
                     case "TES":
                     changeDbDataTesis(connection);
                     break;
-    
+
                 default:
                 System.out.println("NO VALID CODE");
                     break;
             }
         }
     }
-    
+
     private void changeDbDataLibros(ConnectionDb connection)
     {
         // try {
@@ -206,28 +244,28 @@ public class Prestamo {
     }
     private void changeDbDataRevistas(ConnectionDb connection)
     {
-    
+
     }
     private void changeDbDataCds(ConnectionDb connection)
     {
-    
+
     }
     private void changeDbDataTesis(ConnectionDb connection)
     {
-    
+
     }
     private void changeDbDataEbooks(ConnectionDb connection)
     {
-    
+
     }
     private void changeDbDataPeriodicos(ConnectionDb connection)
     {
-    
+
     }
     private void changeDbDataPeliculas(ConnectionDb connection)
     {
-    
+
     }
-    
-        
+
+
 }

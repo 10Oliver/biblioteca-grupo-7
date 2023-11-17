@@ -1,6 +1,13 @@
 package classes.Otros;
 
-import java.util.Date;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import classes.Conexion.ConnectionDb;
 
 public class Usuario {
     private int id;
@@ -17,7 +24,7 @@ public class Usuario {
     private String SELECT_USER_BY_ID = "SELECT * FROM Usuarios WHERE id = ?";
 
     private String SELECT_USER_BY_NAME = "SELECT * FROM Usuarios WHERE NombreUsuario = ?";
-
+    private String REGISTRAR_STATEMENT = "INSERT INTO Usuarios (NombreUsuario, Contrasena, Correo, FechaNacimiento, PassTemporal, Telefono, idRol) VALUES(?,?,?,?,?,?,?)";
 
     public Usuario(int id, String nombreUsuario, String contrasena, String correo, Date fechaNacimiento, String passTemporal, int telefono, int idRol) {
         this.id = id;
@@ -98,7 +105,7 @@ public class Usuario {
         try {
             PreparedStatement statement = connection.getConnection().prepareStatement(SELECT_ALL_USERS);
             ResultSet resultSet = statement.executeQuery();
-    
+
             while (resultSet.next()) {
                 // Map ResultSet to Cd
                 setId(resultSet.getInt("id"));
@@ -109,7 +116,7 @@ public class Usuario {
                 setPassTemporal(resultSet.getString("passTemporal"));
                 setTelefono(resultSet.getInt("telefono"));
                 setIdRol(resultSet.getInt("idRol"));
-    
+
                 Usuario usuario = new Usuario(getId(),getNombreUsuario(),getContrasena(),getCorreo(),getFechaNacimiento(),getPassTemporal(),getTelefono(),getIdRol());
                 usuarios.add(usuario);
             }
@@ -119,14 +126,14 @@ public class Usuario {
         }
         return usuarios;
     }
-    
+
     public Usuario selectUsuarioByCorreo(ConnectionDb connection) {
         Usuario usuario = null;
         try {
             PreparedStatement statement = connection.getConnection().prepareStatement(SELECT_USER_BY_NAME);
             statement.setString(1, getCorreo());
             ResultSet resultSet = statement.executeQuery();
-    
+
             if (resultSet.next()) {
                 // Map ResultSet to Cd
                 setId(resultSet.getInt("id"));
@@ -138,7 +145,7 @@ public class Usuario {
                 setTelefono(resultSet.getInt("telefono"));
                 setIdRol(resultSet.getInt("idRol"));
                 usuario = new Usuario(getId(),getNombreUsuario(),getContrasena(),getCorreo(),getFechaNacimiento(),getPassTemporal(),getTelefono(),getIdRol());
-    
+
             } else {
                 System.out.println("No Cd found with the provided ID.");
             }
@@ -167,7 +174,7 @@ public class Usuario {
             e.printStackTrace();
         }
     }
-    
+
     public boolean Login(ConnectionDb connection,String correo, String pwd){
         int rowsInserted = 1;
         if(rowsInserted > 0){
@@ -188,5 +195,5 @@ public class Usuario {
         }
         return password;
     }
-    
+
 }

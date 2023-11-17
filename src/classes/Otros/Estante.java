@@ -1,4 +1,10 @@
 package classes.Otros;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import classes.Conexion.ConnectionDb;
 
 public class Estante {
     private int id;
@@ -36,7 +42,7 @@ public class Estante {
         try {
             PreparedStatement statement = connection.getConnection().prepareStatement(selectAllEstantes);
             ResultSet resultSet = statement.executeQuery();
-    
+
             while (resultSet.next()) {
                 // Map ResultSet to Cd
                 setId(resultSet.getInt("id"));
