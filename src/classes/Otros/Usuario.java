@@ -167,6 +167,12 @@ public class Usuario {
                 statement.setInt(index++,getIdRol());
                 int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
+            
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                setId(generatedKeys.getInt(1));
+            }
+            
                 System.out.println("A new Cd was inserted successfully!");
             }
         } catch (SQLException e) {
@@ -194,6 +200,10 @@ public class Usuario {
             password = password + arrayCaracteres[index];
         }
         return password;
+    }
+
+    public void actualizarContrasenia(ConnectionDb connection, String nuevaContrasenia, int usuarioId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
