@@ -11,6 +11,7 @@ import java.util.Map;
 import classes.Conexion.ConnectionDb;
 
 import classes.Otros.Prestamo;
+import classes.Otros.Usuario;
 import classes.RecursosDigitalesFolder.*;
 import classes.RecursosFisicosFolder.*;
 import java.util.Arrays;
@@ -295,15 +296,6 @@ public class realizarPrestamo extends javax.swing.JPanel {
 
     private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
         int tipoProducto = this.tipoProductoMap.get(cmbTipoProducto.getSelectedItem().toString());
-        /*
-        this.tipoProductoMap.put("Libro", 1);
-        this.tipoProductoMap.put("Periodico", 2);
-        this.tipoProductoMap.put("Revista", 3);
-        this.tipoProductoMap.put("Tesis", 4);
-        this.tipoProductoMap.put("CD", 5);
-        this.tipoProductoMap.put("EBook", 6);
-        this.tipoProductoMap.put("Pelicula", 7);
-         */
         switch (tipoProducto) {
             case 1:
                 this.libro.setCodigoIdentificacion(txtNombreProducto.getText());
