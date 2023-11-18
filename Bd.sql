@@ -37,6 +37,7 @@ CREATE TABLE Prestamos (
                            FechaDevolucionReal DATE,
                            Mora FLOAT,
                            CodigoEjemplar VARCHAR(255),
+                           CodigoPrestamo VARCHAR(255),
                            FOREIGN KEY (idUsuario) REFERENCES Usuarios(id)
 );
 
