@@ -350,8 +350,8 @@ public class realizarPrestamo extends javax.swing.JPanel {
             }
             prestamos.setIdUsuario(this.userId);
             prestamos.setFechaDevolucion(fechaDevolver);
-            prestamos.procesarVariosPrestamos(this.obtenerCodigo());
-            JOptionPane.showMessageDialog(null, "Se ha guardado el préstamos", "¡Éxito!", JOptionPane.INFORMATION_MESSAGE);
+            String codigoAutorizacion = prestamos.procesarVariosPrestamos(this.obtenerCodigo());
+            JOptionPane.showMessageDialog(null, "Se ha guardado el préstamos \n el código de transacción es: " + codigoAutorizacion, "¡Éxito!", JOptionPane.INFORMATION_MESSAGE);
             this.limpiarContenido();
         } catch (Exception exception) {
             System.out.println(exception);
