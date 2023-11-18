@@ -5,19 +5,39 @@
  */
 package componentes;
 
+import classes.Conexion.ConnectionDb;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Oliver
  */
 public class buscarProducto extends javax.swing.JPanel {
 
+    DefaultTableModel dtm = new DefaultTableModel();
+    Connection conn = null;
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
+    
     /**
      * Creates new form buscarProducto
      */
     public buscarProducto() {
         initComponents();
+        
+        String [] cabezeras = new String [] {"id", "nombre","datos"};
+        dtm.setColumnIdentifiers(cabezeras);
     }
-
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -112,21 +132,45 @@ public class buscarProducto extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void txt1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt1ActionPerformed
         // TODO add your handling code here:
+     
     }//GEN-LAST:event_txt1ActionPerformed
-
+    
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        String opcion = jComboBox1.getSelectedItem().toString();
-        String datobuscar = txt1.getText();        
+        try {
+            // TODO add your handling code here:
+            
+            String opcion = jComboBox1.getSelectedItem().toString();
+            String datobuscar = txt1.getText();
+            
+            String SQL_SELECT = "SELECT * FROM " + opcion + " WHERE nombre_de_la_columna LIKE ?";
+            stmt = conn.prepareStatement(SQL_SELECT);
+            stmt.setString(1, "%" + datobuscar + "%");
+            rs = stmt.executeQuery();
+            
+            dtm.setRowCount(0);
+            
+            while (rs.next()) {
+            Object[] fila = new Object[]{rs.getInt("id"), rs.getString("nombre"), rs.getString("datos")};
+            dtm.addRow(fila);           
+            }
+            
+            } catch (SQLException e) {
+        e.printStackTrace();
+    } 
+            jTable1.setModel(dtm);
+            //NO BORRAR ESTE CORCHETE KEVIN 
     }//GEN-LAST:event_jButton1ActionPerformed
-
-
+    //NO BORRAR ESTE CORCHETE KEVIN 
+  
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;

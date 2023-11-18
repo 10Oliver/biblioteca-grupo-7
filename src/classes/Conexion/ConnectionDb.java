@@ -2,13 +2,22 @@ package classes.Conexion;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ConnectionDb{
+
+    public static void closeConnection(Connection conn) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public static void close(ResultSet rs) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     private Connection connection;
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/Biblioteca";
-    private static final String JDBC_USER = "root";
-    private static final String JDBC_PASS = "Nelsonmandela31";
+    private static final String JDBC_USER = "1234";
+    private static final String JDBC_PASS = "1234";
 
     public static Connection getConnection() {
         Connection connection = null;

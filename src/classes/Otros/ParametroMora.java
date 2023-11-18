@@ -1,5 +1,7 @@
 package classes.Otros;
 
+import java.sql.Connection;
+
 public class ParametroMora {
     private int idParametros;
     private float mora;

@@ -117,6 +117,11 @@ public class realizarPrestamo extends javax.swing.JPanel {
         cmbTipoProducto.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnBuscarProducto.setText("Buscar");
+        btnBuscarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarProductoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlSeleccionProductosLayout = new javax.swing.GroupLayout(pnlSeleccionProductos);
         pnlSeleccionProductos.setLayout(pnlSeleccionProductosLayout);
@@ -208,6 +213,10 @@ public class realizarPrestamo extends javax.swing.JPanel {
     private void btnBuscarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarUsuarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBuscarUsuarioActionPerformed
+
+    private void btnBuscarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarProductoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBuscarProductoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
