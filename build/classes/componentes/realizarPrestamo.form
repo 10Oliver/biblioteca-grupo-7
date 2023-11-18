@@ -94,7 +94,7 @@
                       <Component id="lblUsuario" min="-2" max="-2" attributes="0"/>
                       <Component id="txtFechaEntrega" alignment="0" min="-2" pref="400" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="c" min="-2" pref="300" max="-2" attributes="0"/>
+                          <Component id="txtNombreUsuario" min="-2" pref="300" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="btnBuscarUsuario" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -110,7 +110,7 @@
                   <Component id="lblUsuario" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="c" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtNombreUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnBuscarUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
@@ -133,7 +133,7 @@
             <Property name="text" type="java.lang.String" value="Ingresa el nombre del usuario:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="c">
+        <Component class="javax.swing.JTextField" name="txtNombreUsuario">
         </Component>
         <Component class="javax.swing.JLabel" name="lblFechaEntrega">
           <Properties>

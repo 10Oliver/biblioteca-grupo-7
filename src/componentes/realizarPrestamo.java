@@ -38,6 +38,8 @@ public class realizarPrestamo extends javax.swing.JPanel {
     private Tesis tesis = new Tesis();
     private Vector<Vector<Object>> productosPrestar = new Vector<>();
     private String[] productosTitulos = {"Código de identificación", "Nombre del producto", "Tipo de producto"};
+    
+    private int userId;
 
     /**
      * Creates new form prestamo
@@ -49,6 +51,7 @@ public class realizarPrestamo extends javax.swing.JPanel {
         // Se colocan las columnas de la tabla
         this.cargarDatosTabla();
         con.getConnection();
+        txtUsuarioSeleccionado.setEnabled(false);
     }
 
     private void cargarDatosTabla() {
@@ -77,6 +80,10 @@ public class realizarPrestamo extends javax.swing.JPanel {
 
     private void alertaNoEncontrado() {
         JOptionPane.showMessageDialog(null, "No se ha encontrado el producto.", "Producto inexistente", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    private void alertaUsuarioNoEncontrado() {
+        JOptionPane.showMessageDialog(null, "No se ha encontrado el usuario con el nombre de usuario escrito.", "Usuario inexistente", JOptionPane.INFORMATION_MESSAGE);
     }
     
 
@@ -120,7 +127,7 @@ public class realizarPrestamo extends javax.swing.JPanel {
         lblTitulo = new javax.swing.JLabel();
         pnlSeleccionUsuario = new javax.swing.JPanel();
         lblUsuario = new javax.swing.JLabel();
-        c = new javax.swing.JTextField();
+        txtNombreUsuario = new javax.swing.JTextField();
         lblFechaEntrega = new javax.swing.JLabel();
         txtFechaEntrega = new javax.swing.JTextField();
         lblUsuarioSelecionado = new javax.swing.JLabel();
@@ -175,7 +182,7 @@ public class realizarPrestamo extends javax.swing.JPanel {
                     .addComponent(lblUsuario)
                     .addComponent(txtFechaEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlSeleccionUsuarioLayout.createSequentialGroup()
-                        .addComponent(c, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtNombreUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnBuscarUsuario)))
                 .addContainerGap(56, Short.MAX_VALUE))
@@ -187,7 +194,7 @@ public class realizarPrestamo extends javax.swing.JPanel {
                 .addComponent(lblUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlSeleccionUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(c, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNombreUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscarUsuario))
                 .addGap(33, 33, 33)
                 .addGroup(pnlSeleccionUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -306,14 +313,23 @@ public class realizarPrestamo extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarUsuarioActionPerformed
-        // TODO add your handling code here:
+        Usuario usuario = new Usuario();
+        usuario.setCorreo(txtNombreUsuario.getText());
+        Usuario usuarioSeleccionado = usuario.selectUsuarioByCorreo(con);
+        if (usuarioSeleccionado == null) {
+            this.alertaUsuarioNoEncontrado();
+            return;
+        }
+        txtUsuarioSeleccionado.setText(usuarioSeleccionado.getNombreUsuario());
+        this.userId = usuarioSeleccionado.getId();
     }//GEN-LAST:event_btnBuscarUsuarioActionPerformed
 
     private void btnRegistrarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPrestamoActionPerformed
         try {
-            Prestamo prestamos = new Prestamo(1, "");
+            Prestamo prestamos = new Prestamo();
+            prestamos.setIdUsuario(this.userId);
             prestamos.procesarVariosPrestamos(this.obtenerCodigo());
-            JOptionPane.showMessageDialog(null, "Se ha guardado el préstamos", "¡Éxito!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Se ha guardado el préstamos", "¡Éxito!", JOptionPane.INFORMATION_MESSAGE);
             this.limpiarContenido();
         } catch(Exception exception){
              JOptionPane.showMessageDialog(null, "Error al guardar el préstamo.", "Error al guardar", JOptionPane.ERROR_MESSAGE);
@@ -396,7 +412,6 @@ public class realizarPrestamo extends javax.swing.JPanel {
     private javax.swing.JButton btnBuscarProducto;
     private javax.swing.JButton btnBuscarUsuario;
     private javax.swing.JButton btnRegistrarPrestamo;
-    private javax.swing.JTextField c;
     private javax.swing.JComboBox<String> cmbTipoProducto;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFechaEntrega;
@@ -410,6 +425,7 @@ public class realizarPrestamo extends javax.swing.JPanel {
     private javax.swing.JTable tblProductos;
     private javax.swing.JTextField txtFechaEntrega;
     private javax.swing.JTextField txtNombreProducto;
+    private javax.swing.JTextField txtNombreUsuario;
     private javax.swing.JTextField txtUsuarioSeleccionado;
     // End of variables declaration//GEN-END:variables
 }
