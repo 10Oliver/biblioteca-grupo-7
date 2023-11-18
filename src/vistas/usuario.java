@@ -199,11 +199,12 @@ private void cambiarContrasena(String nombreUsuario) {
                 nuevoUsuario.getTelefono(),
                 nuevoUsuario.getIdRol()
         });
-        JOptionPane.showMessageDialog(this, "Usuario agregado:\n" + nuevoUsuario.toString());
         model.fireTableDataChanged();
         numeroDeFila++;
         jTable1.repaint();
         System.out.println("Nuevo usuario agregado a la tabla.");
+    
+        JOptionPane.showMessageDialog(this, "Usuario agregado:\n" + nuevoUsuario.toString());
     }
 
 

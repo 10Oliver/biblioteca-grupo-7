@@ -184,8 +184,8 @@ public class Usuario {
             int index = 1;
             PreparedStatement statement = connection.getConnection().prepareStatement(CAMBIAR_PWD_STATEMENT);
                 statement.setString(index++,nuevaContrasenia);
-                statement.setInt(index++,userId);
                 statement.setString(index++,nombreUsuario);
+                statement.setInt(index++,userId);
 
                 int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
