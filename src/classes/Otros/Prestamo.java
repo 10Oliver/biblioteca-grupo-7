@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+// import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -93,6 +94,9 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
 
     public Date getFechaDevolucion() {
         return fechaDevolucion;
+    }
+    public java.sql.Date getFechaDevolucionSql() {
+        return (java.sql.Date) fechaDevolucion;
     }
 
     public void setFechaDevolucion(Date fechaDevolucion) {
@@ -188,14 +192,13 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
             Date currentDate = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String formattedDate = dateFormat.format(currentDate);
-
             String insertQuery = "INSERT INTO Prestamos (idUsuario, FechaPrestamo, CodigoEjemplar, CodigoPrestamo, FechaDevolucion) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = connection.getConnection().prepareStatement(insertQuery)) {
                 preparedStatement.setInt(1, idUsuario);
                 preparedStatement.setString(2, formattedDate);
                 preparedStatement.setString(3, codigoEjemplar);
                 preparedStatement.setString(4,uId);
-                PreparedStatement.setDate(5, getFechaDevolucion());
+                preparedStatement.setDate(5, getFechaDevolucionSql());
 
                 int rowsInserted = preparedStatement.executeUpdate();
 
@@ -279,14 +282,13 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
         }
     }
 
-    public String cuantosPuedePrestar(ConnectionDb connection, int userId, String codigoPrestamo) throws SQLException{
+    public int cuantosPuedePrestar(ConnectionDb connection, int userId, String codigoPrestamo) throws SQLException{
 
-        String selectQuery = "SELECT COUNT(*) FROM Prestamos WHERE idUsuario = ? AND CodigoPrestamo = ?";
+        String selectQuery = "SELECT COUNT(*) FROM Prestamos WHERE idUsuario = ?";
         int cantidadParaPrestar = 0;
         try{
             PreparedStatement prestamoStatement = connection.getConnection().prepareStatement(selectQuery);
             prestamoStatement.setInt(1, userId);
-            prestamoStatement.setString(2, codigoPrestamo);
             ResultSet prestamoResult = prestamoStatement.executeQuery();
 
             if (prestamoResult.next()) {
@@ -295,7 +297,7 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
         }catch(SQLException e){
             throw new SQLException("No se pudo encontrar el préstamo.",e);
         }
-        return "Este usuario tiene " + cantidadParaPrestar + " prestamos disponibles.";
+        return cantidadParaPrestar;
     }
 
     private void EliminarPrestamo(ConnectionDb connection, String codigoPrestamo) {
