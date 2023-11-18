@@ -36,6 +36,9 @@ public class Usuario {
         this.telefono = telefono;
         this.idRol = idRol;
     }
+    public Usuario(){
+
+    }
 
     public int getId() {
         return id;

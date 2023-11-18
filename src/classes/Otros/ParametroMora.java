@@ -14,13 +14,16 @@ public class ParametroMora {
 
     private String selectParametrosMoraByID = "SELECT * FROM ParametrosMora WHERE idParametros = ?";
     private String INSERT_QUERY = "INSERT INTO parametro_mora (mora, max_prestamo, id_rol) VALUES (?, ?, ?)";
-    private String UPDATE_QUERY = "UPDATE parametro_mora SET mora = ?, max_prestamo = ? WHERE id_parametros = ?";
+    private String UPDATE_QUERY = "UPDATE parametro_mora SET mora = ?, max_prestamo = ? WHERE id_rol = ?";
 
     public ParametroMora(int idParametros, float mora, int maxPrestamo, int idRol) {
         this.idParametros = idParametros;
         this.mora = mora;
         this.maxPrestamo = maxPrestamo;
         this.idRol = idRol;
+    }
+    public ParametroMora(){
+
     }
 
     public int getIdParametros() {
@@ -75,7 +78,7 @@ public class ParametroMora {
             PreparedStatement preparedStatement = connection.getConnection().prepareStatement(UPDATE_QUERY);
             preparedStatement.setFloat(1, parametroMora.getMora());
             preparedStatement.setInt(2, parametroMora.getMaxPrestamo());
-            preparedStatement.setInt(3, parametroMora.getIdParametros());
+            preparedStatement.setInt(3, parametroMora.getIdRol());
 
             preparedStatement.executeUpdate();
 
