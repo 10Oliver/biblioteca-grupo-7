@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import classes.Conexion.ConnectionDb;
 
 public class Estante {
@@ -20,6 +21,9 @@ public class Estante {
     public Estante(int id, String nombreEstante) {
         this.id = id;
         this.nombreEstante = nombreEstante;
+    }
+    public Estante(){
+
     }
 
     public int getId() {
@@ -51,7 +55,7 @@ public class Estante {
                 estantes.add(estante);
             }
         } catch (SQLException e) {
-            System.out.println("Error occurred while selecting all Cds: " + e.getMessage());
+            System.out.println("Error occurred while selecting all Estantes: " + e.getMessage());
             e.printStackTrace();
         }
         return estantes;

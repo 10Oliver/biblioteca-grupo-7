@@ -22,6 +22,7 @@ public class Usuario {
     private String SELECT_ALL_USERS = "SELECT * FROM Usuarios";
 
     private String SELECT_USER_BY_ID = "SELECT * FROM Usuarios WHERE id = ?";
+    private String CAMBIAR_PWD_STATEMENT = "UPDATE Usuarios SET Contrasena = ? WHERE NombreUsuario = ? AND id = ?";
 
     private String SELECT_USER_BY_NAME = "SELECT * FROM Usuarios WHERE NombreUsuario = ?";
     private String REGISTRAR_STATEMENT = "INSERT INTO Usuarios (NombreUsuario, Contrasena, Correo, FechaNacimiento, PassTemporal, Telefono, idRol) VALUES(?,?,?,?,?,?,?)";
@@ -36,9 +37,8 @@ public class Usuario {
         this.telefono = telefono;
         this.idRol = idRol;
     }
+    public Usuario(){
 
-    public Usuario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public int getId() {
@@ -111,7 +111,7 @@ public class Usuario {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                // Map ResultSet to Cd
+
                 setId(resultSet.getInt("id"));
                 setNombreUsuario(resultSet.getString("NombreUsuario"));
                 setContrasena(resultSet.getString("contrasena"));
@@ -125,7 +125,7 @@ public class Usuario {
                 usuarios.add(usuario);
             }
         } catch (SQLException e) {
-            System.out.println("Error occurred while selecting all Cds: " + e.getMessage());
+            System.out.println("Error occurred while selecting all User: " + e.getMessage());
             e.printStackTrace();
         }
         return usuarios;
@@ -139,7 +139,7 @@ public class Usuario {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                // Map ResultSet to Cd
+
                 setId(resultSet.getInt("id"));
                 setNombreUsuario(resultSet.getString("NombreUsuario"));
                 setContrasena(resultSet.getString("contrasena"));
@@ -151,10 +151,10 @@ public class Usuario {
                 usuario = new Usuario(getId(),getNombreUsuario(),getContrasena(),getCorreo(),getFechaNacimiento(),getPassTemporal(),getTelefono(),getIdRol());
 
             } else {
-                System.out.println("No Cd found with the provided ID.");
+                System.out.println("No User found with the provided ID.");
             }
         } catch (SQLException e) {
-            System.out.println("Error occurred while selecting all Cds: " + e.getMessage());
+            System.out.println("Error occurred while selecting all User: " + e.getMessage());
             e.printStackTrace();
         }
         return usuario;
@@ -171,16 +171,28 @@ public class Usuario {
                 statement.setInt(index++,getIdRol());
                 int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
-            
-                ResultSet generatedKeys = statement.getGeneratedKeys();
-                if (generatedKeys.next()) {
-                setId(generatedKeys.getInt(1));
-            }
-            
-                System.out.println("A new Cd was inserted successfully!");
+                System.out.println("A new User was inserted successfully!");
             }
         } catch (SQLException e) {
-            System.out.println("Error occurred while selecting all Cds: " + e.getMessage());
+            System.out.println("Error occurred while selecting all User: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void cambiarContrasena(ConnectionDb connection, String contrasenaNueva, int userId, String nombreUsuario){
+        try {
+            int index = 1;
+            PreparedStatement statement = connection.getConnection().prepareStatement(CAMBIAR_PWD_STATEMENT);
+                statement.setString(index++,contrasenaNueva);
+                statement.setInt(index++,userId);
+                statement.setString(index++,nombreUsuario);
+
+                int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("A new User was inserted successfully!");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred while selecting all User: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -204,10 +216,6 @@ public class Usuario {
             password = password + arrayCaracteres[index];
         }
         return password;
-    }
-
-    public void actualizarContrasenia(ConnectionDb connection, String nuevaContrasenia, int usuarioId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
