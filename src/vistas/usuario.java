@@ -1,10 +1,12 @@
-
 package vistas;
 
 import classes.Conexion.ConnectionDb;
 import classes.Otros.Usuario;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 public class usuario extends javax.swing.JPanel {
     
@@ -12,6 +14,7 @@ public class usuario extends javax.swing.JPanel {
 
     public usuario() {
         initComponents();
+        refreshTable();
     }
 
     @SuppressWarnings("unchecked")
@@ -97,7 +100,7 @@ public class usuario extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarActionPerformed
-       
+        ConnectionDb connection = new ConnectionDb();
         // TODO add your handling code here:
         String nombreUsuario = JOptionPane.showInputDialog(this, "Ingrese nombre de usuario:");
         String correo = JOptionPane.showInputDialog(this, "Ingrese correo:");
@@ -110,13 +113,12 @@ public class usuario extends javax.swing.JPanel {
         // Verificar si las contraseñas coinciden
         if (contrasenia.equals(confirmarContrasenia)) {
             Usuario nuevoUsuario = new Usuario(0, nombreUsuario, contrasenia, correo, java.sql.Date.valueOf(fechaNacimiento), null, Integer.parseInt(telefono), Integer.parseInt(rol));
-            ConnectionDb connection = new ConnectionDb();
             nuevoUsuario.Registrar(connection);
-            agregarUsuario(nuevoUsuario);
+            refreshTable();
         } else {
             JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden. Inténtelo de nuevo.");
         }           
-        System.out.println("Usuario registrado en la base de datos.");
+         connection.cerrarConexion();  
     }//GEN-LAST:event_AgregarActionPerformed
 
     private void RestablecerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RestablecerActionPerformed
@@ -169,8 +171,25 @@ private void restablecerContrasenia(String nombreUsuario) {
     }
     }//GEN-LAST:event_RestablecerActionPerformed
 
-private void agregarUsuario(Usuario nuevoUsuario) {
-        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
+    private List<Usuario> refreshTable() {
+        ConnectionDb connection = new ConnectionDb();
+        List<Usuario> usuarios = new ArrayList<>();
+        try {
+        usuarios = new Usuario().selectAllUsuarios(connection);    
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0); // Limpiar datos existentes en la tabla
+
+        for (Usuario usuario : usuarios) {
+            agregarUsuarioEnTabla(usuario); // Utilizar el método existente para agregar el usuario a la tabla
+        }
+       } finally {
+        connection.cerrarConexion(); // Cerrar la conexión cuando haya terminado
+    }
+         return usuarios;
+}
+
+    private void agregarUsuarioEnTabla(Usuario nuevoUsuario) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
 
         model.addRow(new Object[]{
                 numeroDeFila,
@@ -189,7 +208,7 @@ private void agregarUsuario(Usuario nuevoUsuario) {
 
 
 private boolean buscarUsuario(String nombreUsuario) {
-    javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
+   DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         for (int i = 0; i < model.getRowCount(); i++) {
             if (nombreUsuario.equals(model.getValueAt(i, 1))) {
                 return true;
@@ -206,5 +225,4 @@ private boolean buscarUsuario(String nombreUsuario) {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
-
 }
