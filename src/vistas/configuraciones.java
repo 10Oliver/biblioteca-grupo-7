@@ -12,40 +12,68 @@ import classes.Conexion.ConnectionDb;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Oliver
  */
 public class configuraciones extends javax.swing.JPanel {
+
     private ConnectionDb con = new ConnectionDb();
-    private Rol rol = new Rol(1, "");
+    private Rol rol = new Rol();
+    private ParametroMora mora = new ParametroMora();
     private List<Rol> roles;
     private Map<String, Integer> tipoRoles = new HashMap<>();
-    
+
     /**
      * Creates new form configuraciones
      */
     public configuraciones() {
-        initComponents();
         this.cargarRoles();
+        initComponents();
+        this.cargarComboBox();
     }
 
     private void cargarRoles() {
         this.roles = rol.selectAllRols(con);
-        cmbRol.removeAllItems();
-        for (Rol rolItem : roles) {
-            cmbRol.addItem(rolItem.getNombreRol());
-            tipoRoles.put(rolItem.getNombreRol(), rolItem.getId());
+        //cmbRol.removeAllItems();
+        for (Rol rolItem : this.roles) {
+            //cmbRol.addItem(rolItem.getNombreRol());
+            this.tipoRoles.put(rolItem.getNombreRol(), rolItem.getId());
         }
     }
     
-    private void leerConfiguracion() {
+    private void cargarComboBox() {
+        cmbRol.removeAllItems();
+        for (Rol rolItem : this.roles) {
+            cmbRol.addItem(rolItem.getNombreRol());
+        }
+    }
 
+    private void leerConfiguracion() {
+        mora.setIdRol(this.tipoRoles.get(cmbRol.getSelectedItem().toString()));
+        System.out.println(this.tipoRoles.get(cmbRol.getSelectedItem().toString()));
+        ParametroMora moraRol = mora.selectParametrosByRol(con);
+        if (moraRol == null) {
+            return;
+        }
+        txtLimite.setText(String.valueOf(moraRol.getMaxPrestamo()));
+        txtMoraAnual.setText(String.valueOf(moraRol.getMora()));
     }
-    
+
     private void actualizarConfiguracion() {
-        
+        try {
+            mora.setMaxPrestamo(Integer.parseInt(txtLimite.getText()));
+            mora.setMora(Float.parseFloat(txtMoraAnual.getText()));
+            mora.setIdRol(this.tipoRoles.get(cmbRol.getSelectedItem().toString()));
+            mora.updateParametroMora(mora);
+            JOptionPane.showMessageDialog(null, "Se han actuializado los valores para el tipo de rol seleccionado.", "Configuración actualizada", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error al actualizar la información..", "Erro al actualizar", JOptionPane.ERROR_MESSAGE);
+        }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -60,7 +88,7 @@ public class configuraciones extends javax.swing.JPanel {
         lblTituloLiite = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         lblLimiteProfesores = new javax.swing.JLabel();
-        txtLimiteProfesores = new javax.swing.JTextField();
+        txtLimite = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         lblMora = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
@@ -87,7 +115,7 @@ public class configuraciones extends javax.swing.JPanel {
 
         lblLimiteProfesores.setText("Limite del productos para el usuario seleccionado");
 
-        txtLimiteProfesores.setText("0");
+        txtLimite.setText("0");
 
         javax.swing.GroupLayout pnlLimiteLayout = new javax.swing.GroupLayout(pnlLimite);
         pnlLimite.setLayout(pnlLimiteLayout);
@@ -103,7 +131,7 @@ public class configuraciones extends javax.swing.JPanel {
                         .addGap(22, 22, 22)
                         .addGroup(pnlLimiteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblLimiteProfesores)
-                            .addComponent(txtLimiteProfesores, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtLimite, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(106, Short.MAX_VALUE))
         );
         pnlLimiteLayout.setVerticalGroup(
@@ -116,7 +144,7 @@ public class configuraciones extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(lblLimiteProfesores)
                 .addGap(18, 18, 18)
-                .addComponent(txtLimiteProfesores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtLimite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(90, Short.MAX_VALUE))
         );
 
@@ -180,7 +208,11 @@ public class configuraciones extends javax.swing.JPanel {
 
         lblIndicacionRol.setText("Selecciona el rol al que se le aplicarán las configuraciones");
 
-        cmbRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbRol.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbRolItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -249,8 +281,12 @@ public class configuraciones extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
+        this.actualizarConfiguracion();
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void cmbRolItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbRolItemStateChanged
+        this.leerConfiguracion();
+    }//GEN-LAST:event_cmbRolItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -269,7 +305,7 @@ public class configuraciones extends javax.swing.JPanel {
     private javax.swing.JLabel lblTituloLiite;
     private javax.swing.JLabel lblTituloRol;
     private javax.swing.JPanel pnlLimite;
-    private javax.swing.JTextField txtLimiteProfesores;
+    private javax.swing.JTextField txtLimite;
     private javax.swing.JTextField txtMoraAnual;
     // End of variables declaration//GEN-END:variables
 }

@@ -17,8 +17,8 @@ public class ParametroMora {
 
     private String SELECT_PARAMS_BY_ID = "SELECT * FROM ParametrosMora WHERE idParametros = ?";
     private String SELECT_PARAMS_BY_ROL = "SELECT * FROM ParametrosMora WHERE idRol = ?";
-    private String INSERT_QUERY = "INSERT INTO parametro_mora (mora, max_prestamo, id_rol) VALUES (?, ?, ?)";
-    private String UPDATE_QUERY = "UPDATE parametro_mora SET mora = ?, max_prestamo = ? WHERE id_rol = ?";
+    private String INSERT_QUERY = "INSERT INTO ParametrosMora (mora, maxPrestamo, idRol) VALUES (?, ?, ?)";
+    private String UPDATE_QUERY = "UPDATE ParametrosMora SET mora = ?, maxPrestamo = ? WHERE idRol = ?";
 
     public ParametroMora(int idParametros, float mora, int maxPrestamo, int idRol) {
         this.idParametros = idParametros;
