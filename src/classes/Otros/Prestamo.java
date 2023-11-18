@@ -242,13 +242,14 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
         }
     }
 
-    public void procesarVariosPrestamos(List<String> codigosEjemplar)
+    public String procesarVariosPrestamos(List<String> codigosEjemplar)
     {
         ConnectionDb connection = new ConnectionDb();
         String processUuid = UUID.randomUUID().toString();
         for (String codigo : codigosEjemplar) {
             crearPrestamo(connection,processUuid,codigo,getIdUsuario());
         }
+        return processUuid;
     }
 
     public void devolverRecursos(ConnectionDb connection,List<String> codigos, String codigoPrestamo) {
