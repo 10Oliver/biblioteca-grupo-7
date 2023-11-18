@@ -15,6 +15,8 @@ public class Rol {
     private String selectRolByID = "SELECT * FROM Roles WHERE id = ?";
 
     private String selectRolByNombreRol = "SELECT * FROM Roles WHERE NombreRol = ?";
+    private String insertRol = "INSERT INTO Roles (NombreRol) VALUES (?)";
+    private String updateRol = "UPDATE Roles SET NombreRol WHERE id =?";
 
 
     public Rol(int id, String nombreRol) {
@@ -58,5 +60,22 @@ public class Rol {
             e.printStackTrace();
         }
         return roles;
+    }
+    public Rol selectRolsById(ConnectionDb connection) {
+        Rol rol = null;
+        try {
+            PreparedStatement statement = connection.getConnection().prepareStatement(selectRolByID);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                setId(resultSet.getInt("id"));
+                setNombreRol(resultSet.getString("NombreRol"));
+                rol = new Rol(getId(),getNombreRol());
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred while selecting all Cds: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return rol;
     }
 }
