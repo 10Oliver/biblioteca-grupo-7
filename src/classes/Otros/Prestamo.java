@@ -189,12 +189,13 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String formattedDate = dateFormat.format(currentDate);
 
-            String insertQuery = "INSERT INTO Prestamos (idUsuario, FechaPrestamo, CodigoEjemplar, CodigoPrestamo) VALUES (?, ?, ?, ?)";
+            String insertQuery = "INSERT INTO Prestamos (idUsuario, FechaPrestamo, CodigoEjemplar, CodigoPrestamo, FechaDevolucion) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = connection.getConnection().prepareStatement(insertQuery)) {
                 preparedStatement.setInt(1, idUsuario);
                 preparedStatement.setString(2, formattedDate);
                 preparedStatement.setString(3, codigoEjemplar);
                 preparedStatement.setString(4,uId);
+                PreparedStatement.setDate(5, getFechaDevolucion());
 
                 int rowsInserted = preparedStatement.executeUpdate();
 
