@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import classes.Conexion.ConnectionDb;
+import validaciones.validaciones;
 
 import classes.Otros.Prestamo;
 import classes.Otros.Usuario;
@@ -16,6 +17,7 @@ import classes.RecursosDigitalesFolder.*;
 import classes.RecursosFisicosFolder.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import javax.swing.JOptionPane;
@@ -28,6 +30,7 @@ import javax.swing.table.DefaultTableModel;
 public class realizarPrestamo extends javax.swing.JPanel {
 
     private Map<String, Integer> tipoProductoMap = new HashMap<>();
+    private validaciones validaciones = new validaciones();
     private ConnectionDb con = new ConnectionDb();
     private Cd cd = new Cd();
     private Ebook ebook = new Ebook();
@@ -327,7 +330,19 @@ public class realizarPrestamo extends javax.swing.JPanel {
     private void btnRegistrarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPrestamoActionPerformed
         try {
             Prestamo prestamos = new Prestamo();
+
+            // Se revisa cuántos puede prestar
+            int totalPrestado = prestamos.cuantosPuedePrestar(con, this.userId, "");
+            int totalPosible = 0;
+            if (totalPrestado >= totalPosible) {
+                JOptionPane.showMessageDialog(null, "No tienes la cantidad necesaria de préstamos disponibles \n Cantidad disponible" + (totalPosible - totalPrestado), "Limite alcanzado", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+            if (!this.validaciones.validarFecha(txtFechaEntrega.getText())) {
+                return;
+            }
             prestamos.setIdUsuario(this.userId);
+            prestamos.setFechaDevolucion(new Date(txtFechaEntrega.getText()));
             prestamos.procesarVariosPrestamos(this.obtenerCodigo());
             JOptionPane.showMessageDialog(null, "Se ha guardado el préstamos", "¡Éxito!", JOptionPane.INFORMATION_MESSAGE);
             this.limpiarContenido();
