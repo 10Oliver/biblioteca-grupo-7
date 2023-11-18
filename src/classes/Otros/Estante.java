@@ -55,7 +55,7 @@ public class Estante {
                 estantes.add(estante);
             }
         } catch (SQLException e) {
-            System.out.println("Error occurred while selecting all Cds: " + e.getMessage());
+            System.out.println("Error occurred while selecting all Estantes: " + e.getMessage());
             e.printStackTrace();
         }
         return estantes;

@@ -77,11 +77,11 @@ public class Periodico extends RecursosFisicos {
             setNombreEstante(resultSet.getString("NombreEstante"));
             periodico = new Periodico(getId(),getCodigoIdentificacion(),getTitulo(),getFechaPublicacion(),getStock(),getNombreEstante(),getNumeroPaginas(),getNombrePeriodico(),getLugarPublicacion());
         } else {
-            System.out.println("No Ebook found with the provided ID.");
+            System.out.println("No Periodico found with the provided ID.");
         }
 
     } catch (SQLException e) {
-        System.out.println("Error occurred while selecting the Ebook: " + e.getMessage());
+        System.out.println("Error occurred while selecting the Periodico: " + e.getMessage());
         e.printStackTrace();
     }
     return periodico;
@@ -108,11 +108,11 @@ public List<Periodico> selectAllPeriodico(ConnectionDb connection) {
             Periodico periodico = new Periodico(getId(),getCodigoIdentificacion(),getTitulo(),getFechaPublicacion(),getStock(),getNombreEstante(),getNumeroPaginas(),getNombrePeriodico(),getLugarPublicacion());
             periodicos.add(periodico);
         } else {
-            System.out.println("No Ebook found with the provided ID.");
+            System.out.println("No Periodico found with the provided ID.");
         }
 
     } catch (SQLException e) {
-        System.out.println("Error occurred while selecting the Ebook: " + e.getMessage());
+        System.out.println("Error occurred while selecting the Periodico: " + e.getMessage());
         e.printStackTrace();
     }
     return periodicos;

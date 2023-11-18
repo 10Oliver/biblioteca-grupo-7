@@ -147,11 +147,11 @@ public Libro selectLibro(ConnectionDb connection) {
             setNombreEstante(resultSet.getString("NombreEstante"));
             libro = new Libro(getId(),getCodigoIdentificacion(),getTitulo(),getFechaPublicacion(),getStock(),getNombreEstante(),getNumeroPaginas(),getAutor(),getEditorial(),getIsbn(),getEdicion(),getLugarPublicacion(),getGenero(),getIdioma(),getNotas());
         } else {
-            System.out.println("No Ebook found with the provided ID.");
+            System.out.println("No Libro found with the provided ID.");
         }
 
     } catch (SQLException e) {
-        System.out.println("Error occurred while selecting the Ebook: " + e.getMessage());
+        System.out.println("Error occurred while selecting the Libro: " + e.getMessage());
         e.printStackTrace();
     }
     return libro;
@@ -186,7 +186,7 @@ public List<Libro> selectAllLibros(ConnectionDb connection) {
         }
 
     } catch (SQLException e) {
-        System.out.println("Error occurred while selecting the Ebook: " + e.getMessage());
+        System.out.println("Error occurred while selecting the Libro: " + e.getMessage());
         e.printStackTrace();
     }
     return libros;
