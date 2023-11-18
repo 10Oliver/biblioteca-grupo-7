@@ -179,11 +179,11 @@ public class Usuario {
         }
     }
 
-    public void cambiarContrasena(ConnectionDb connection, String contrasenaNueva, int userId, String nombreUsuario){
+    public void cambiarContrasena(ConnectionDb connection, String nuevaContrasenia, int userId, String nombreUsuario){
         try {
             int index = 1;
             PreparedStatement statement = connection.getConnection().prepareStatement(CAMBIAR_PWD_STATEMENT);
-                statement.setString(index++,contrasenaNueva);
+                statement.setString(index++,nuevaContrasenia);
                 statement.setInt(index++,userId);
                 statement.setString(index++,nombreUsuario);
 
@@ -217,5 +217,4 @@ public class Usuario {
         }
         return password;
     }
-
 }

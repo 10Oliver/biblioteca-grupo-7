@@ -128,13 +128,13 @@ public class usuario extends javax.swing.JPanel {
     // Verifica si el nombre de usuario existe en la tabla
     if (buscarUsuario(nombreUsuario)) {
         // Si existe, permite al usuario restablecer la contraseña
-        restablecerContrasenia(nombreUsuario);
+        cambiarContrasena(nombreUsuario);
     } else {
         JOptionPane.showMessageDialog(this, "El nombre de usuario no existe. Inténtelo de nuevo.");
     }
 }  
 // Método para restablecer la contraseña de un usuario
-private void restablecerContrasenia(String nombreUsuario) {
+private void cambiarContrasena(String nombreUsuario) {
     // Obtener el modelo de la tabla
     javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
     ConnectionDb connection = new ConnectionDb();
@@ -148,7 +148,7 @@ private void restablecerContrasenia(String nombreUsuario) {
     }
 
         // Obtener el ID del usuario
-    int usuarioId = (int) model.getValueAt(filaUsuario, 0);
+    int userId = (int) model.getValueAt(filaUsuario, 0);
     // Solicitar la nueva contraseña
     String nuevaContrasenia = JOptionPane.showInputDialog(this, "Ingrese la nueva contraseña:");
 
@@ -161,7 +161,7 @@ private void restablecerContrasenia(String nombreUsuario) {
         if (nuevaContrasenia.equals(confirmarNuevaContrasenia)) {
                         // Actualizar la contraseña en la base de datos
             Usuario usuario = new Usuario(0, null, nuevaContrasenia, null, null, null, 0, 0);
-            usuario.actualizarContrasenia(connection, nuevaContrasenia, usuarioId);
+            usuario.cambiarContrasena(connection, nuevaContrasenia, userId, nombreUsuario);
             JOptionPane.showMessageDialog(this, "La contraseña ha sido restablecida exitosamente.");
         } else {
             JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden. Inténtelo de nuevo.");
