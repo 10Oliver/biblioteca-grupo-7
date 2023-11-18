@@ -5,8 +5,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
+// import java.sql.Date;
 import java.util.List;
+import java.util.UUID;
 
 import classes.Conexion.ConnectionDb;
 
@@ -19,12 +22,38 @@ public class Prestamo {
     private Date fechaDevolucionReal;
     private float mora;
     private String codigoEjemplar;
+    private String codigoPrestamo;
 
-    private String selectAllPrestamos = "SELECT * FROM Prestamos";
+    private String SELECT_ALL_PRESTAMOS = "SELECT * FROM Prestamos";
 
-    private String selectPrestamoByID = "SELECT * FROM Prestamos WHERE id = ?";
+    private String SELECT_ALL_PRESTAMOS_BY_ID = "SELECT * FROM Prestamos WHERE id = ?";
 
-    private String selectPrestamosByUsuarioID = "SELECT * FROM Prestamos WHERE idUsuario = ?";
+    private String SELECT_ALL_PRESTAMOS_BY_USER = "SELECT * FROM Prestamos WHERE idUsuario = ?";
+
+    private String SELECT_ALL_PRESTAMOS_BY_TRANSACTION = "SELECT * FROM Prestamos WHERE CodigoPrestamo = ?";
+
+
+
+
+
+
+// String select_ebooks_stock = "SELECT CodigoIdentificacion, Stock FROM Ebooks WHERE CodigoIdentificacion = WHERE CodigoIdentificacion = ?";
+// String select_libros_stock = "SELECT CodigoIdentificacion, Stock FROM Libros WHERE CodigoIdentificacion = WHERE CodigoIdentificacion = ?";
+// String select_periodicos_stock = "SELECT CodigoIdentificacion, Stock FROM Periodicos WHERE CodigoIdentificacion = WHERE CodigoIdentificacion = ?";
+// String select_tesis_stock = "SELECT CodigoIdentificacion, Stock FROM Tesis WHERE CodigoIdentificacion = WHERE CodigoIdentificacion = ?";
+// String select_peliculas_stock = "SELECT CodigoIdentificacion, Stock FROM Peliculas WHERE CodigoIdentificacion = WHERE CodigoIdentificacion = ?";
+// String select_cds_stock = "SELECT CodigoIdentificacion, Stock FROM Cds WHERE CodigoIdentificacion = WHERE CodigoIdentificacion = ?";
+// String select_revistas_stock = "SELECT CodigoIdentificacion, Stock FROM Revistas WHERE CodigoIdentificacion = WHERE CodigoIdentificacion = ?";
+
+
+String update_ebooks_stock = "UPDATE Ebooks SET Stock = Stock + ? WHERE CodigoIdentificacion = ?";
+String update_libros_stock = "UPDATE Libros SET Stock = Stock + ? WHERE CodigoIdentificacion = ?";
+String update_periodicos_stock = "UPDATE Periodicos SET Stock = Stock + ? WHERE CodigoIdentificacion = ?";
+String update_tesis_stock = "UPDATE Tesis SET Stock = Stock - ? WHERE CodigoIdentificacion = ?";
+String update_peliculas_stock = "UPDATE Peliculas SET Stock = Stock + ? WHERE CodigoIdentificacion = ?";
+String update_cds_stock = "UPDATE Cds SET Stock = Stock - ? WHERE CodigoIdentificacion = ?";
+String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE CodigoIdentificacion = ?";
+
 
 
     public Prestamo(int id, int idUsuario, Date fechaPrestamo, Date fechaDevolucion, Date fechaDevolucionReal, float mora, String codigoEjemplar) {
@@ -37,6 +66,9 @@ public class Prestamo {
         this.codigoEjemplar = codigoEjemplar;
     }
     public Prestamo(int idUsuario,String codigoEjemplar){
+
+    }
+    public Prestamo(){
 
     }
 
@@ -67,6 +99,9 @@ public class Prestamo {
     public Date getFechaDevolucion() {
         return fechaDevolucion;
     }
+    public java.sql.Date getFechaDevolucionSql() {
+        return (java.sql.Date) fechaDevolucion;
+    }
 
     public void setFechaDevolucion(Date fechaDevolucion) {
         this.fechaDevolucion = fechaDevolucion;
@@ -95,6 +130,13 @@ public class Prestamo {
     public void setCodigoEjemplar(String codigoEjemplar) {
         this.codigoEjemplar = codigoEjemplar;
     }
+    public void setCodigoPrestamo(String codigoPrestamo) {
+        this.codigoPrestamo = codigoPrestamo;
+    }
+    public String getCodigoPrestamo() {
+        return codigoPrestamo;
+    }
+
     public Date obtenerFechaDevolucionReal(ConnectionDb connection, int idPrestamo, String codigoEjemplar) throws SQLException {
         String selectPrestamoQuery = "SELECT FechaDevolucionReal FROM Prestamos WHERE id = ? AND CodigoEjemplar = ?";
         try (PreparedStatement prestamoStatement = connection.getConnection().prepareStatement(selectPrestamoQuery)) {
@@ -155,19 +197,19 @@ public class Prestamo {
         }
     }
 
-        public void crearPrestamo(ConnectionDb connection) {
+    public void crearPrestamo(ConnectionDb connection, String uId,String codigoEjemplar,int idUsuario) {
         try {
             Date currentDate = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String formattedDate = dateFormat.format(currentDate);
-
-            String insertQuery = "INSERT INTO Prestamos (idUsuario, FechaPrestamo, CodigoEjemplar) VALUES (?, ?, ?)";
+            String insertQuery = "INSERT INTO Prestamos (idUsuario, FechaPrestamo, CodigoEjemplar, CodigoPrestamo, FechaDevolucion) VALUES (?, ?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = connection.getConnection().prepareStatement(insertQuery)) {
-                preparedStatement.setInt(1, getIdUsuario());
+                preparedStatement.setInt(1, idUsuario);
                 preparedStatement.setString(2, formattedDate);
-                preparedStatement.setString(3, getCodigoEjemplar());
+                preparedStatement.setString(3, codigoEjemplar);
+                preparedStatement.setString(4,uId);
+                preparedStatement.setDate(5, getFechaDevolucionSql());
 
-                // Execute the insert query
                 int rowsInserted = preparedStatement.executeUpdate();
 
                 if (rowsInserted > 0) {
@@ -181,91 +223,211 @@ public class Prestamo {
         }
     }
 
-    private void procesarVariosPrestamos(List<String> codigosEjemplar)
-    {
-        ConnectionDb connection = new ConnectionDb();
-        for (String t : codigosEjemplar) {
-            String codigo = String.valueOf(t.charAt(0)) + String.valueOf(t.charAt(1)) + String.valueOf(t.charAt(2));
-            switch (codigo) {
-                    case "LIB":
-                    changeDbDataLibros(connection);
-                    break;
-                    case "REV":
-                    changeDbDataRevistas(connection);
-                    break;
-                    case "CDA":
-                    changeDbDataCds(connection);
-                    break;
-                    case "PEL":
-                    changeDbDataPeliculas(connection);
-                    break;
-                    case "EBK":
-                    changeDbDataEbooks(connection);
-                    break;
-                    case "PER":
-                    changeDbDataPeriodicos(connection);
-                    break;
-                    case "TES":
-                    changeDbDataTesis(connection);
-                    break;
+    public void devolverEnEstantes(ConnectionDb connection, int cantidadDevuelta, String estante) {
+        try {
+            try (PreparedStatement preparedStatement = connection.getConnection().prepareStatement(estante)) {
+                preparedStatement.setInt(1, cantidadDevuelta);
+                preparedStatement.setString(2,getCodigoEjemplar());
 
-                default:
-                System.out.println("NO VALID CODE");
-                    break;
+                int rowsInserted = preparedStatement.executeUpdate();
+
+                if (rowsInserted > 0) {
+                    System.out.println("New Prestamo created successfully!");
+                } else {
+                    System.out.println("Failed to create new Prestamo. Check your input values.");
+                }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    private void changeDbDataLibros(ConnectionDb connection)
+    public void procesarVariosPrestamos(List<String> codigosEjemplar)
     {
-        // try {
-        //     int index = 1;
-        //     PreparedStatement statement = connection.getConnection().prepareStatement("UPDATE_STATEMENT");
-        //     statement.setString(index++, getTitulo());
-        //     statement.setString(index++, getAutor());
-        //     statement.setInt(index++, getNumeroPaginas());
-        //     statement.setInt(index++, getIsbn());
-        //     statement.setString(index++, getEditorial());
-        //     statement.setString(index++, getPeriodicidad());
-        //     statement.setDate(index++, getFechaPublicacion());
-        //     statement.setString(index++, getPaisCiudad());
-        //     statement.setString(index++, getNotas());
-        //     statement.setInt(index++, getStock());
-        //     statement.setInt(index++, Integer.parseInt(getNombreEstante()));
-        //     statement.setString(index++, getCodigoIdentificacion());
-        //     int rowsUpdated = statement.executeUpdate();
-        //     if (rowsUpdated > 0) {
-        //         System.out.println("Revista was updated successfully!");
-        //     }
-        // } catch (SQLException e) {
-        //     System.out.println("Error occurred while updating Revista: " + e.getMessage());
-        //     e.printStackTrace();
-        // }
-    }
-    private void changeDbDataRevistas(ConnectionDb connection)
-    {
-
-    }
-    private void changeDbDataCds(ConnectionDb connection)
-    {
-
-    }
-    private void changeDbDataTesis(ConnectionDb connection)
-    {
-
-    }
-    private void changeDbDataEbooks(ConnectionDb connection)
-    {
-
-    }
-    private void changeDbDataPeriodicos(ConnectionDb connection)
-    {
-
-    }
-    private void changeDbDataPeliculas(ConnectionDb connection)
-    {
-
+        ConnectionDb connection = new ConnectionDb();
+        String processUuid = UUID.randomUUID().toString();
+        for (String codigo : codigosEjemplar) {
+            crearPrestamo(connection,processUuid,codigo,getIdUsuario());
+        }
     }
 
+    public void devolverRecursos(ConnectionDb connection,List<String> codigos, String codigoPrestamo) {
+
+        int cantidadDevuelta = 0;
+        for(String code : codigos){
+            String codigo = String.valueOf(code.charAt(0)) + String.valueOf(code.charAt(1)) + String.valueOf(code.charAt(2));
+                switch (codigo) {
+                    case "LIB":
+                    devolverEnEstantes(connection,cantidadDevuelta,update_libros_stock);
+                    EliminarPrestamo(connection,codigoPrestamo);
+                    break;
+                    case "REV":
+                    devolverEnEstantes(connection,cantidadDevuelta,update_revistas_stock);
+                    EliminarPrestamo(connection,codigoPrestamo);
+                    break;
+                    case "CDA":
+                    devolverEnEstantes(connection,cantidadDevuelta,update_cds_stock);
+                    EliminarPrestamo(connection,codigoPrestamo);
+                    break;
+                    case "PEL":
+                    devolverEnEstantes(connection,cantidadDevuelta,update_peliculas_stock);
+                    EliminarPrestamo(connection,codigoPrestamo);
+                    break;
+                    case "EBK":
+                    devolverEnEstantes(connection,cantidadDevuelta,update_ebooks_stock);
+                    EliminarPrestamo(connection,codigoPrestamo);
+                    break;
+                    case "PER":
+                    devolverEnEstantes(connection,cantidadDevuelta,update_periodicos_stock);
+                    EliminarPrestamo(connection,codigoPrestamo);
+                    break;
+                    case "TES":
+                    devolverEnEstantes(connection,cantidadDevuelta,update_tesis_stock);
+                    EliminarPrestamo(connection,codigoPrestamo);
+                    break;
+                    default:
+                    System.out.println("NO VALID CODE");
+                    break;
+                }
+        }
+    }
+
+    public int cuantosPuedePrestar(ConnectionDb connection, int userId, String codigoPrestamo) throws SQLException{
+
+        String selectQuery = "SELECT COUNT(*) FROM Prestamos WHERE idUsuario = ?";
+        int cantidadParaPrestar = 0;
+        try{
+            PreparedStatement prestamoStatement = connection.getConnection().prepareStatement(selectQuery);
+            prestamoStatement.setInt(1, userId);
+            ResultSet prestamoResult = prestamoStatement.executeQuery();
+
+            if (prestamoResult.next()) {
+                cantidadParaPrestar = prestamoResult.getInt(1);
+            }
+        }catch(SQLException e){
+            throw new SQLException("No se pudo encontrar el préstamo.",e);
+        }
+        return cantidadParaPrestar;
+    }
+
+    private void EliminarPrestamo(ConnectionDb connection, String codigoPrestamo) {
+        try {
+            String deleteQuery = "DELETE FROM Prestamos WHERE AND CodigoPrestamo = ?";
+            try (PreparedStatement deleteStatement = connection.getConnection().prepareStatement(deleteQuery)) {
+                deleteStatement.setString(1, codigoPrestamo);
+                deleteStatement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Prestamo> selectAllPrestamos(ConnectionDb connection)
+    {
+        List<Prestamo> prestamos = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.getConnection().prepareStatement(SELECT_ALL_PRESTAMOS);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                setId(resultSet.getInt("id"));
+                setIdUsuario(resultSet.getInt("idUsuario"));
+                setFechaPrestamo(resultSet.getDate("FechaPrestamo"));
+                setFechaDevolucion(resultSet.getDate("FechaDevolucion"));
+                setFechaDevolucionReal(resultSet.getDate("FechaDevolucionReal"));
+                setMora(resultSet.getFloat("Mora"));
+                setCodigoEjemplar(resultSet.getString("CodigoEjemplar"));
+                setCodigoPrestamo(resultSet.getString("CodigoPrestamo"));
+                Prestamo prestamo = new Prestamo();
+                prestamos.add(prestamo);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred while selecting all Prestamos: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return prestamos;
+
+    }
+    public List<Prestamo> selectAllPrestamosByUser(ConnectionDb connection)
+    {
+        List<Prestamo> prestamos = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.getConnection().prepareStatement(SELECT_ALL_PRESTAMOS_BY_USER);
+            statement.setInt(1,getIdUsuario());
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                setId(resultSet.getInt("id"));
+                setIdUsuario(resultSet.getInt("idUsuario"));
+                setFechaPrestamo(resultSet.getDate("FechaPrestamo"));
+                setFechaDevolucion(resultSet.getDate("FechaDevolucion"));
+                setFechaDevolucionReal(resultSet.getDate("FechaDevolucionReal"));
+                setMora(resultSet.getFloat("Mora"));
+                setCodigoEjemplar(resultSet.getString("CodigoEjemplar"));
+                setCodigoPrestamo(resultSet.getString("CodigoPrestamo"));
+                Prestamo prestamo = new Prestamo();
+                prestamos.add(prestamo);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred while selecting all Prestamos: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return prestamos;
+
+    }
+
+    public List<Prestamo> selectAllPrestamosById(ConnectionDb connection)
+    {
+        List<Prestamo> prestamos = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.getConnection().prepareStatement(SELECT_ALL_PRESTAMOS_BY_USER);
+            statement.setInt(1,getId());
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                setId(resultSet.getInt("id"));
+                setIdUsuario(resultSet.getInt("idUsuario"));
+                setFechaPrestamo(resultSet.getDate("FechaPrestamo"));
+                setFechaDevolucion(resultSet.getDate("FechaDevolucion"));
+                setFechaDevolucionReal(resultSet.getDate("FechaDevolucionReal"));
+                setMora(resultSet.getFloat("Mora"));
+                setCodigoEjemplar(resultSet.getString("CodigoEjemplar"));
+                setCodigoPrestamo(resultSet.getString("CodigoPrestamo"));
+                Prestamo prestamo = new Prestamo();
+                prestamos.add(prestamo);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred while selecting all Prestamos: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return prestamos;
+
+    }
+    public List<Prestamo> selectAllPrestamosByTransaction(ConnectionDb connection)
+    {
+        List<Prestamo> prestamos = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.getConnection().prepareStatement(SELECT_ALL_PRESTAMOS_BY_TRANSACTION);
+            statement.setString(1,getCodigoPrestamo());
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                setId(resultSet.getInt("id"));
+                setIdUsuario(resultSet.getInt("idUsuario"));
+                setFechaPrestamo(resultSet.getDate("FechaPrestamo"));
+                setFechaDevolucion(resultSet.getDate("FechaDevolucion"));
+                setFechaDevolucionReal(resultSet.getDate("FechaDevolucionReal"));
+                setMora(resultSet.getFloat("Mora"));
+                setCodigoEjemplar(resultSet.getString("CodigoEjemplar"));
+                setCodigoPrestamo(resultSet.getString("CodigoPrestamo"));
+                Prestamo prestamo = new Prestamo();
+                prestamos.add(prestamo);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred while selecting all Prestamos: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return prestamos;
+    }
 
 }
