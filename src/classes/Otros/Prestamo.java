@@ -96,7 +96,7 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
         return fechaDevolucion;
     }
     public java.sql.Date getFechaDevolucionSql() {
-        return (java.sql.Date) fechaDevolucion;
+        return new java.sql.Date(fechaDevolucion.getTime());
     }
 
     public void setFechaDevolucion(Date fechaDevolucion) {

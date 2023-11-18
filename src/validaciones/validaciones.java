@@ -5,6 +5,7 @@
  */
 package validaciones;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
 
@@ -13,17 +14,19 @@ import javax.swing.JOptionPane;
  * @author Oliver
  */
 public class validaciones {
-    
-    public validaciones() {}
-    
-    public boolean validarFecha(String fecha) {
+
+    public validaciones() {
+    }
+
+    public Date validarFecha(String fecha) {
         try {
-           Date newFecha = new Date(fecha);
-           return true;
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date newFecha = formatter.parse(fecha);
+            return newFecha;
         } catch (Exception exception) {
             JOptionPane.showMessageDialog(null, "La fecha ingresada no es válida.", "Error de dato", JOptionPane.WARNING_MESSAGE);
-            return false;
+            return null;
         }
     }
-    
+
 }

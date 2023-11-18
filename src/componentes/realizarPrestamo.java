@@ -12,6 +12,7 @@ import classes.Conexion.ConnectionDb;
 import validaciones.validaciones;
 
 import classes.Otros.Prestamo;
+import classes.Otros.ParametroMora;
 import classes.Otros.Usuario;
 import classes.RecursosDigitalesFolder.*;
 import classes.RecursosFisicosFolder.*;
@@ -41,8 +42,9 @@ public class realizarPrestamo extends javax.swing.JPanel {
     private Tesis tesis = new Tesis();
     private Vector<Vector<Object>> productosPrestar = new Vector<>();
     private String[] productosTitulos = {"Código de identificación", "Nombre del producto", "Tipo de producto"};
-    
+
     private int userId;
+    private int userRolId;
 
     /**
      * Creates new form prestamo
@@ -84,11 +86,10 @@ public class realizarPrestamo extends javax.swing.JPanel {
     private void alertaNoEncontrado() {
         JOptionPane.showMessageDialog(null, "No se ha encontrado el producto.", "Producto inexistente", JOptionPane.INFORMATION_MESSAGE);
     }
-    
+
     private void alertaUsuarioNoEncontrado() {
         JOptionPane.showMessageDialog(null, "No se ha encontrado el usuario con el nombre de usuario escrito.", "Usuario inexistente", JOptionPane.INFORMATION_MESSAGE);
     }
-    
 
     private void cargarNuevoContenido(String codigo, String titulo, String tipo) {
         Vector fila = new Vector();
@@ -101,7 +102,7 @@ public class realizarPrestamo extends javax.swing.JPanel {
         // Limpia el buscador
         txtNombreProducto.setText("");
     }
-    
+
     private List<String> obtenerCodigo() {
         List<String> codigos = new ArrayList<String>();
         for (Vector<Object> item : this.productosPrestar) {
@@ -109,7 +110,7 @@ public class realizarPrestamo extends javax.swing.JPanel {
         }
         return codigos;
     }
-    
+
     private void limpiarContenido() {
         txtUsuarioSeleccionado.setText("");
         txtFechaEntrega.setText("");
@@ -325,29 +326,36 @@ public class realizarPrestamo extends javax.swing.JPanel {
         }
         txtUsuarioSeleccionado.setText(usuarioSeleccionado.getNombreUsuario());
         this.userId = usuarioSeleccionado.getId();
+        this.userRolId = usuarioSeleccionado.getIdRol();
     }//GEN-LAST:event_btnBuscarUsuarioActionPerformed
 
     private void btnRegistrarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPrestamoActionPerformed
         try {
             Prestamo prestamos = new Prestamo();
+            ParametroMora mora = new ParametroMora();
+            mora.setIdRol(this.userRolId);
+            mora.selectParametrosByRol(con);
 
             // Se revisa cuántos puede prestar
             int totalPrestado = prestamos.cuantosPuedePrestar(con, this.userId, "");
-            int totalPosible = 0;
+            int totalPosible = mora.getMaxPrestamo();
             if (totalPrestado >= totalPosible) {
                 JOptionPane.showMessageDialog(null, "No tienes la cantidad necesaria de préstamos disponibles \n Cantidad disponible" + (totalPosible - totalPrestado), "Limite alcanzado", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
-            if (!this.validaciones.validarFecha(txtFechaEntrega.getText())) {
+            // Intenta convertir el valor a una fecha válida
+            Date fechaDevolver = this.validaciones.validarFecha(txtFechaEntrega.getText());
+            if (fechaDevolver == null) {
                 return;
             }
             prestamos.setIdUsuario(this.userId);
-            prestamos.setFechaDevolucion(new Date(txtFechaEntrega.getText()));
+            prestamos.setFechaDevolucion(fechaDevolver);
             prestamos.procesarVariosPrestamos(this.obtenerCodigo());
             JOptionPane.showMessageDialog(null, "Se ha guardado el préstamos", "¡Éxito!", JOptionPane.INFORMATION_MESSAGE);
             this.limpiarContenido();
-        } catch(Exception exception){
-             JOptionPane.showMessageDialog(null, "Error al guardar el préstamo.", "Error al guardar", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception exception) {
+            System.out.println(exception);
+            JOptionPane.showMessageDialog(null, "Error al guardar el préstamo.", "Error al guardar", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnRegistrarPrestamoActionPerformed
 
@@ -372,7 +380,7 @@ public class realizarPrestamo extends javax.swing.JPanel {
                 }
                 this.cargarNuevoContenido(periodicoSeleccionado.getCodigoIdentificacion(), periodicoSeleccionado.getTitulo(), "Periodico");
                 break;
-                
+
             case 3:
                 this.revista.setCodigoIdentificacion(txtNombreProducto.getText());
                 Revista revistaSeleccionado = this.revista.selectRevista(con);
@@ -390,7 +398,7 @@ public class realizarPrestamo extends javax.swing.JPanel {
                     return;
                 }
                 this.cargarNuevoContenido(tesisSeleccionada.getCodigoIdentificacion(), tesisSeleccionada.getTitulo(), "Tesis");
-                
+
                 break;
             case 5:
                 this.cd.setCodigoIdentificacion(txtNombreProducto.getText());
