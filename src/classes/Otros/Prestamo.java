@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
 // import java.sql.Date;
 import java.util.List;
@@ -23,11 +24,14 @@ public class Prestamo {
     private String codigoEjemplar;
     private String codigoPrestamo;
 
-    private String selectAllPrestamos = "SELECT * FROM Prestamos";
+    private String SELECT_ALL_PRESTAMOS = "SELECT * FROM Prestamos";
 
-    private String selectPrestamoByID = "SELECT * FROM Prestamos WHERE id = ?";
+    private String SELECT_ALL_PRESTAMOS_BY_ID = "SELECT * FROM Prestamos WHERE id = ?";
 
-    private String selectPrestamosByUsuarioID = "SELECT * FROM Prestamos WHERE idUsuario = ?";
+    private String SELECT_ALL_PRESTAMOS_BY_USER = "SELECT * FROM Prestamos WHERE idUsuario = ?";
+
+    private String SELECT_ALL_PRESTAMOS_BY_TRANSACTION = "SELECT * FROM Prestamos WHERE CodigoPrestamo = ?";
+
 
 
 
@@ -125,6 +129,12 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
 
     public void setCodigoEjemplar(String codigoEjemplar) {
         this.codigoEjemplar = codigoEjemplar;
+    }
+    public void setCodigoPrestamo(String codigoPrestamo) {
+        this.codigoPrestamo = codigoPrestamo;
+    }
+    public String getCodigoPrestamo() {
+        return codigoPrestamo;
     }
 
     public Date obtenerFechaDevolucionReal(ConnectionDb connection, int idPrestamo, String codigoEjemplar) throws SQLException {
@@ -311,4 +321,113 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
             e.printStackTrace();
         }
     }
+
+    public List<Prestamo> selectAllPrestamos(ConnectionDb connection)
+    {
+        List<Prestamo> prestamos = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.getConnection().prepareStatement(SELECT_ALL_PRESTAMOS);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                setId(resultSet.getInt("id"));
+                setIdUsuario(resultSet.getInt("idUsuario"));
+                setFechaPrestamo(resultSet.getDate("FechaPrestamo"));
+                setFechaDevolucion(resultSet.getDate("FechaDevolucion"));
+                setFechaDevolucionReal(resultSet.getDate("FechaDevolucionReal"));
+                setMora(resultSet.getFloat("Mora"));
+                setCodigoEjemplar(resultSet.getString("CodigoEjemplar"));
+                setCodigoPrestamo(resultSet.getString("CodigoPrestamo"));
+                Prestamo prestamo = new Prestamo();
+                prestamos.add(prestamo);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred while selecting all Prestamos: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return prestamos;
+
+    }
+    public List<Prestamo> selectAllPrestamosByUser(ConnectionDb connection)
+    {
+        List<Prestamo> prestamos = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.getConnection().prepareStatement(SELECT_ALL_PRESTAMOS_BY_USER);
+            statement.setInt(1,getIdUsuario());
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                setId(resultSet.getInt("id"));
+                setIdUsuario(resultSet.getInt("idUsuario"));
+                setFechaPrestamo(resultSet.getDate("FechaPrestamo"));
+                setFechaDevolucion(resultSet.getDate("FechaDevolucion"));
+                setFechaDevolucionReal(resultSet.getDate("FechaDevolucionReal"));
+                setMora(resultSet.getFloat("Mora"));
+                setCodigoEjemplar(resultSet.getString("CodigoEjemplar"));
+                setCodigoPrestamo(resultSet.getString("CodigoPrestamo"));
+                Prestamo prestamo = new Prestamo();
+                prestamos.add(prestamo);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred while selecting all Prestamos: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return prestamos;
+
+    }
+
+    public List<Prestamo> selectAllPrestamosById(ConnectionDb connection)
+    {
+        List<Prestamo> prestamos = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.getConnection().prepareStatement(SELECT_ALL_PRESTAMOS_BY_USER);
+            statement.setInt(1,getId());
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                setId(resultSet.getInt("id"));
+                setIdUsuario(resultSet.getInt("idUsuario"));
+                setFechaPrestamo(resultSet.getDate("FechaPrestamo"));
+                setFechaDevolucion(resultSet.getDate("FechaDevolucion"));
+                setFechaDevolucionReal(resultSet.getDate("FechaDevolucionReal"));
+                setMora(resultSet.getFloat("Mora"));
+                setCodigoEjemplar(resultSet.getString("CodigoEjemplar"));
+                setCodigoPrestamo(resultSet.getString("CodigoPrestamo"));
+                Prestamo prestamo = new Prestamo();
+                prestamos.add(prestamo);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred while selecting all Prestamos: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return prestamos;
+
+    }
+    public List<Prestamo> selectAllPrestamosByTransaction(ConnectionDb connection)
+    {
+        List<Prestamo> prestamos = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.getConnection().prepareStatement(SELECT_ALL_PRESTAMOS_BY_TRANSACTION);
+            statement.setString(1,getCodigoPrestamo());
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                setId(resultSet.getInt("id"));
+                setIdUsuario(resultSet.getInt("idUsuario"));
+                setFechaPrestamo(resultSet.getDate("FechaPrestamo"));
+                setFechaDevolucion(resultSet.getDate("FechaDevolucion"));
+                setFechaDevolucionReal(resultSet.getDate("FechaDevolucionReal"));
+                setMora(resultSet.getFloat("Mora"));
+                setCodigoEjemplar(resultSet.getString("CodigoEjemplar"));
+                setCodigoPrestamo(resultSet.getString("CodigoPrestamo"));
+                Prestamo prestamo = new Prestamo();
+                prestamos.add(prestamo);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred while selecting all Prestamos: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return prestamos;
+    }
+
 }
