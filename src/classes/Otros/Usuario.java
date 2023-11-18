@@ -110,7 +110,7 @@ public class Usuario {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                // Map ResultSet to Cd
+
                 setId(resultSet.getInt("id"));
                 setNombreUsuario(resultSet.getString("NombreUsuario"));
                 setContrasena(resultSet.getString("contrasena"));
@@ -124,7 +124,7 @@ public class Usuario {
                 usuarios.add(usuario);
             }
         } catch (SQLException e) {
-            System.out.println("Error occurred while selecting all Cds: " + e.getMessage());
+            System.out.println("Error occurred while selecting all User: " + e.getMessage());
             e.printStackTrace();
         }
         return usuarios;
@@ -138,7 +138,7 @@ public class Usuario {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                // Map ResultSet to Cd
+
                 setId(resultSet.getInt("id"));
                 setNombreUsuario(resultSet.getString("NombreUsuario"));
                 setContrasena(resultSet.getString("contrasena"));
@@ -150,10 +150,10 @@ public class Usuario {
                 usuario = new Usuario(getId(),getNombreUsuario(),getContrasena(),getCorreo(),getFechaNacimiento(),getPassTemporal(),getTelefono(),getIdRol());
 
             } else {
-                System.out.println("No Cd found with the provided ID.");
+                System.out.println("No User found with the provided ID.");
             }
         } catch (SQLException e) {
-            System.out.println("Error occurred while selecting all Cds: " + e.getMessage());
+            System.out.println("Error occurred while selecting all User: " + e.getMessage());
             e.printStackTrace();
         }
         return usuario;
@@ -170,10 +170,10 @@ public class Usuario {
                 statement.setInt(index++,getIdRol());
                 int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
-                System.out.println("A new Cd was inserted successfully!");
+                System.out.println("A new User was inserted successfully!");
             }
         } catch (SQLException e) {
-            System.out.println("Error occurred while selecting all Cds: " + e.getMessage());
+            System.out.println("Error occurred while selecting all User: " + e.getMessage());
             e.printStackTrace();
         }
     }

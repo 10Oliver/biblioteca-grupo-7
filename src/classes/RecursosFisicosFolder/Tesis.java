@@ -96,8 +96,8 @@ public Tesis selectTesis(ConnectionDb connection) {
         ResultSet resultSet = statement.executeQuery();
 
         if (resultSet.next()) {
-            // Map ResultSet to Ebook
-            // Ebook ebook = null;
+            // Map ResultSet to Tesis
+            // Tesis Tesis = null;
             setId(resultSet.getInt("id"));
             setCodigoIdentificacion(resultSet.getString("CodigoIdentificacion"));
             setTitulo(resultSet.getString("Titulo"));
@@ -112,11 +112,11 @@ public Tesis selectTesis(ConnectionDb connection) {
             setNombreEstante(resultSet.getString("NombreEstante"));
             tesis = new Tesis(getId(),getCodigoIdentificacion(),getTitulo(),getFechaPublicacion(),getStock(),getNombreEstante(),getNumeroPaginas(),getAutor(),getEditorial(),getNivelAcademico(),getInstitucionAcademica(),getFacultad());
         } else {
-            System.out.println("No Ebook found with the provided ID.");
+            System.out.println("No Tesis found with the provided ID.");
         }
 
     } catch (SQLException e) {
-        System.out.println("Error occurred while selecting the Ebook: " + e.getMessage());
+        System.out.println("Error occurred while selecting the Tesis: " + e.getMessage());
         e.printStackTrace();
     }
     return tesis;
@@ -129,8 +129,8 @@ public List<Tesis> selectAllTesis(ConnectionDb connection) {
         ResultSet resultSet = statement.executeQuery();
 
         if (resultSet.next()) {
-            // Map ResultSet to Ebook
-            // Ebook ebook = null;
+            // Map ResultSet to Tesis
+            // Tesis Tesis = null;
             setId(resultSet.getInt("id"));
             setCodigoIdentificacion(resultSet.getString("CodigoIdentificacion"));
             setTitulo(resultSet.getString("Titulo"));
@@ -146,11 +146,11 @@ public List<Tesis> selectAllTesis(ConnectionDb connection) {
             Tesis tesis = new Tesis(getId(),getCodigoIdentificacion(),getTitulo(),getFechaPublicacion(),getStock(),getNombreEstante(),getNumeroPaginas(),getAutor(),getEditorial(),getNivelAcademico(),getInstitucionAcademica(),getFacultad());
             Alltesis.add(tesis);
         } else {
-            System.out.println("No Ebook found with the provided ID.");
+            System.out.println("No Tesis found with the provided ID.");
         }
 
     } catch (SQLException e) {
-        System.out.println("Error occurred while selecting the Ebook: " + e.getMessage());
+        System.out.println("Error occurred while selecting the Tesis: " + e.getMessage());
         e.printStackTrace();
     }
     return Alltesis;

@@ -49,14 +49,14 @@ public class Rol {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                // Map ResultSet to Cd
+
                 setId(resultSet.getInt("id"));
                 setNombreRol(resultSet.getString("NombreRol"));
                 Rol rol = new Rol(getId(),getNombreRol());
                 roles.add(rol);
             }
         } catch (SQLException e) {
-            System.out.println("Error occurred while selecting all Cds: " + e.getMessage());
+            System.out.println("Error occurred while selecting all Roles: " + e.getMessage());
             e.printStackTrace();
         }
         return roles;
@@ -73,7 +73,7 @@ public class Rol {
                 rol = new Rol(getId(),getNombreRol());
             }
         } catch (SQLException e) {
-            System.out.println("Error occurred while selecting all Cds: " + e.getMessage());
+            System.out.println("Error occurred while selecting all Roles: " + e.getMessage());
             e.printStackTrace();
         }
         return rol;
