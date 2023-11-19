@@ -22,6 +22,7 @@ public class Usuario {
     private String SELECT_ALL_USERS = "SELECT * FROM Usuarios";
 
     private String SELECT_USER_BY_ID = "SELECT * FROM Usuarios WHERE id = ?";
+    private String CAMBIAR_PWD_STATEMENT = "UPDATE Usuarios SET Contrasena = ? WHERE NombreUsuario = ? AND id = ?";
 
     private String SELECT_USER_BY_NAME = "SELECT * FROM Usuarios WHERE NombreUsuario = ?";
     private String REGISTRAR_STATEMENT = "INSERT INTO Usuarios (NombreUsuario, Contrasena, Correo, FechaNacimiento, PassTemporal, Telefono, idRol) VALUES(?,?,?,?,?,?,?)";
@@ -168,6 +169,24 @@ public class Usuario {
                 statement.setString(index++,TemporalPwdGenerator());
                 statement.setInt(index++,getTelefono());
                 statement.setInt(index++,getIdRol());
+                int rowsInserted = statement.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("A new User was inserted successfully!");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred while selecting all User: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void cambiarContrasena(ConnectionDb connection, String contrasenaNueva, int userId, String nombreUsuario){
+        try {
+            int index = 1;
+            PreparedStatement statement = connection.getConnection().prepareStatement(CAMBIAR_PWD_STATEMENT);
+                statement.setString(index++,contrasenaNueva);
+                statement.setInt(index++,userId);
+                statement.setString(index++,nombreUsuario);
+
                 int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
                 System.out.println("A new User was inserted successfully!");
