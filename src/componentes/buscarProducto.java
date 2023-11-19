@@ -39,7 +39,7 @@ public class buscarProducto extends javax.swing.JPanel {
     public buscarProducto() {
         initComponents(); //ayuda a iniciar todos los metodos 
         
-        
+         DefaultTableModel dtm = new DefaultTableModel();
             
             //seguir agui 
             
@@ -94,11 +94,11 @@ public class buscarProducto extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Titulo", "Codigo"
+                "Id", "Codigo", "Titulo"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -168,13 +168,13 @@ public class buscarProducto extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
      
           DefaultTableModel dtm = new DefaultTableModel();   // DTM ES LA TABLA
+                      dtm = (DefaultTableModel) jTable1.getModel();
+                      
+   
+
         ConnectionDb connection = new ConnectionDb();
         String opcion = jComboBox1.getSelectedItem().toString();
             String datobuscar = txt1.getText();
-              jTable1 = new JTable(dtm);
-                dtm.addColumn("ID");
-                dtm.addColumn("Codigo");
-                dtm.addColumn("Titulo");
               
        
             switch (opcion){
@@ -237,13 +237,24 @@ public class buscarProducto extends javax.swing.JPanel {
                 case "Cd":
                     Cd miCd = new Cd(datobuscar);
                     miCd.selectCd(connection);
-                    Object [] ob5 = new Object[3];
+                   
+                    
+                     Object [] ob5 = new Object[3];
                     ob5 [0] = miCd.getId();
                     ob5 [1] = miCd.getTitulo();
                     ob5 [2] = miCd.getCodigoIdentificacion();
                     dtm.addRow(ob5);
-                    break; 
+             
+                       System.out.println(miCd.getTitulo());
+                       System.out.println(miCd.getCodigoIdentificacion());
+                       System.out.println(miCd.getId());
+                       
                     
+                   
+                      break;
+             
+               
+                        
                 case "Revista":
                     Revista miRevista = new Revista(datobuscar);
                     miRevista.selectRevista(connection);
@@ -253,6 +264,7 @@ public class buscarProducto extends javax.swing.JPanel {
                     ob6 [2] = miRevista.getCodigoIdentificacion();
                     dtm.addRow(ob6);
                     
+                 
                     
                     break; 
                     
@@ -262,7 +274,13 @@ public class buscarProducto extends javax.swing.JPanel {
             //NO BORRAR ESTE CORCHETE KEVIN 
     }//GEN-LAST:event_jButton1ActionPerformed
     //NO BORRAR ESTE CORCHETE KEVIN 
-  
+    
+    private void actualizarTabla(DefaultTableModel dtm) {
+    // Elimina todas las filas existentes en la tabla
+    while (dtm.getRowCount() > 0) {
+        dtm.removeRow(0);
+    }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
