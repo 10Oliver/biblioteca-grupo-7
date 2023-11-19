@@ -151,11 +151,13 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
         throw new SQLException("No se pudo encontrar el préstamo.");
     }
 
-    public void procesarDevolucion(ConnectionDb connection, int idPrestamo, String codigoEjemplar) {
+    public void procesarDevolucion(ConnectionDb connection, int idPrestamo, String codigoEjemplar, Date fecha) {
         try {
-            Date fechaDevolucionReal = obtenerFechaDevolucionReal(connection, idPrestamo, codigoEjemplar);
+            // Date fechaDevolucionReal = obtenerFechaDevolucionReal(connection, idPrestamo, codigoEjemplar);
 
-            if (fechaDevolucionReal != null && fechaDevolucionReal.after(new Date())) {
+            Date ahora = new Date();
+            // if (fechaDevolucionReal != null && fechaDevolucionReal.after(new Date())) {
+            if (ahora != null && ahora.after(fecha)) {
                 // ... (cálculo de mora)
                 float moraTotal = calcularMora(fechaDevolucionReal);
 
@@ -313,7 +315,7 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
 
     private void EliminarPrestamo(ConnectionDb connection, String codigoPrestamo) {
         try {
-            String deleteQuery = "DELETE FROM Prestamos WHERE AND CodigoPrestamo = ?";
+            String deleteQuery = "DELETE FROM Prestamos WHERE CodigoPrestamo = ?";
             try (PreparedStatement deleteStatement = connection.getConnection().prepareStatement(deleteQuery)) {
                 deleteStatement.setString(1, codigoPrestamo);
                 deleteStatement.executeUpdate();
