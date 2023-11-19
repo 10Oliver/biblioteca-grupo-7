@@ -16,8 +16,8 @@ public class ConnectionDb{
     }
     private Connection connection;
     private static final String JDBC_URL = "jdbc:mysql://localhost:3306/Biblioteca";
-    private static final String JDBC_USER = "1234";
-    private static final String JDBC_PASS = "1234";
+    private static final String JDBC_USER = "root";
+    private static final String JDBC_PASS = "F!re17";
 
     public static Connection getConnection() {
         Connection connection = null;
