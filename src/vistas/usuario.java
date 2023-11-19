@@ -9,8 +9,8 @@ import javax.swing.table.DefaultTableModel;
 import java.util.List;
 
 public class usuario extends javax.swing.JPanel {
-    
-     private int numeroDeFila = 1;
+
+    private int numeroDeFila = 1;
 
     public usuario() {
         initComponents();
@@ -117,99 +117,98 @@ public class usuario extends javax.swing.JPanel {
             refreshTable();
         } else {
             JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden. Inténtelo de nuevo.");
-        }           
-         connection.cerrarConexion();  
+        }
+        connection.cerrarConexion();
+        JOptionPane.showMessageDialog(this, "Usuario agregado:\n" + nombreUsuario);
     }//GEN-LAST:event_AgregarActionPerformed
 
     private void RestablecerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RestablecerActionPerformed
-      // Pide al usuario que ingrese su nombre de usuario
-    String nombreUsuario = JOptionPane.showInputDialog(this, "Ingrese su nombre de usuario:");
+        // Pide al usuario que ingrese su nombre de usuario
+        String nombreUsuario = JOptionPane.showInputDialog(this, "Ingrese su nombre de usuario:");
 
-    // Verifica si el nombre de usuario existe en la tabla
-    if (buscarUsuario(nombreUsuario)) {
-        // Si existe, permite al usuario restablecer la contraseña
-        cambiarContrasena(nombreUsuario);
-    } else {
-        JOptionPane.showMessageDialog(this, "El nombre de usuario no existe. Inténtelo de nuevo.");
-    }
-}  
-// Método para restablecer la contraseña de un usuario
-private void cambiarContrasena(String nombreUsuario) {
-    // Obtener el modelo de la tabla
-    javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
-    ConnectionDb connection = new ConnectionDb();
-    // Buscar la fila correspondiente al usuario
-    int filaUsuario = -1;
-    for (int i = 0; i < model.getRowCount(); i++) {
-        if (nombreUsuario.equals(model.getValueAt(i, 1))) {
-            filaUsuario = i;
-            break;
+        // Verifica si el nombre de usuario existe en la tabla
+        if (buscarUsuario(nombreUsuario)) {
+            // Si existe, permite al usuario restablecer la contraseña
+            cambiarContrasena(nombreUsuario);
+        } else {
+            JOptionPane.showMessageDialog(this, "El nombre de usuario no existe. Inténtelo de nuevo.");
         }
     }
+// Método para restablecer la contraseña de un usuario
+
+    private void cambiarContrasena(String nombreUsuario) {
+        // Obtener el modelo de la tabla
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
+        ConnectionDb connection = new ConnectionDb();
+        // Buscar la fila correspondiente al usuario
+        int filaUsuario = -1;
+        for (int i = 0; i < model.getRowCount(); i++) {
+            if (nombreUsuario.equals(model.getValueAt(i, 1))) {
+                filaUsuario = i;
+                break;
+            }
+        }
 
         // Obtener el ID del usuario
-    int userId = (int) model.getValueAt(filaUsuario, 0);
-    // Solicitar la nueva contraseña
-    String nuevaContrasenia = JOptionPane.showInputDialog(this, "Ingrese la nueva contraseña:");
+        int userId = (int) model.getValueAt(filaUsuario, 0);
+        // Solicitar la nueva contraseña
+        String nuevaContrasenia = JOptionPane.showInputDialog(this, "Ingrese la nueva contraseña:");
 
-    // Verificar que se haya ingresado una nueva contraseña
-    if (nuevaContrasenia != null) {
-        // Confirmar la nueva contraseña
-        String confirmarNuevaContrasenia = JOptionPane.showInputDialog(this, "Confirme la nueva contraseña:");
+        // Verificar que se haya ingresado una nueva contraseña
+        if (nuevaContrasenia != null) {
+            // Confirmar la nueva contraseña
+            String confirmarNuevaContrasenia = JOptionPane.showInputDialog(this, "Confirme la nueva contraseña:");
 
-        // Verificar que la contraseña confirmada coincida
-        if (nuevaContrasenia.equals(confirmarNuevaContrasenia)) {
-                        // Actualizar la contraseña en la base de datos
-            Usuario usuario = new Usuario(0, null, nuevaContrasenia, null, null, null, 0, 0);
-            usuario.cambiarContrasena(connection, nuevaContrasenia, userId, nombreUsuario);
-            JOptionPane.showMessageDialog(this, "La contraseña ha sido restablecida exitosamente.");
+            // Verificar que la contraseña confirmada coincida
+            if (nuevaContrasenia.equals(confirmarNuevaContrasenia)) {
+                // Actualizar la contraseña en la base de datos
+                Usuario usuario = new Usuario(0, null, nuevaContrasenia, null, null, null, 0, 0);
+                usuario.cambiarContrasena(connection, nuevaContrasenia, userId, nombreUsuario);
+                JOptionPane.showMessageDialog(this, "La contraseña ha sido restablecida exitosamente.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden. Inténtelo de nuevo.");
+            }
         } else {
-            JOptionPane.showMessageDialog(this, "Las contraseñas no coinciden. Inténtelo de nuevo.");
+            JOptionPane.showMessageDialog(this, "No se ha ingresado una nueva contraseña.");
         }
-    } else {
-        JOptionPane.showMessageDialog(this, "No se ha ingresado una nueva contraseña.");
-    }
     }//GEN-LAST:event_RestablecerActionPerformed
 
     private List<Usuario> refreshTable() {
         ConnectionDb connection = new ConnectionDb();
         List<Usuario> usuarios = new ArrayList<>();
         try {
-        usuarios = new Usuario().selectAllUsuarios(connection);    
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); // Limpiar datos existentes en la tabla
+            usuarios = new Usuario().selectAllUsuarios(connection);
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0); // Limpiar datos existentes en la tabla
 
-        for (Usuario usuario : usuarios) {
-            agregarUsuarioEnTabla(usuario); // Utilizar el método existente para agregar el usuario a la tabla
+            for (Usuario usuario : usuarios) {
+                agregarUsuarioEnTabla(usuario); // Utilizar el método existente para agregar el usuario a la tabla
+            }
+        } finally {
+            connection.cerrarConexion(); // Cerrar la conexión cuando haya terminado
         }
-       } finally {
-        connection.cerrarConexion(); // Cerrar la conexión cuando haya terminado
+        return usuarios;
     }
-         return usuarios;
-}
 
     private void agregarUsuarioEnTabla(Usuario nuevoUsuario) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
 
         model.addRow(new Object[]{
-                numeroDeFila,
-                nuevoUsuario.getNombreUsuario(),
-                nuevoUsuario.getCorreo(),
-                nuevoUsuario.getFechaNacimiento().toString(),
-                nuevoUsuario.getTelefono(),
-                nuevoUsuario.getIdRol()
+            numeroDeFila,
+            nuevoUsuario.getNombreUsuario(),
+            nuevoUsuario.getCorreo(),
+            nuevoUsuario.getFechaNacimiento().toString(),
+            nuevoUsuario.getTelefono(),
+            nuevoUsuario.getIdRol()
         });
         model.fireTableDataChanged();
         numeroDeFila++;
         jTable1.repaint();
         System.out.println("Nuevo usuario agregado a la tabla.");
-    
-        JOptionPane.showMessageDialog(this, "Usuario agregado:\n" + nuevoUsuario.toString());
     }
 
-
-private boolean buscarUsuario(String nombreUsuario) {
-   DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    private boolean buscarUsuario(String nombreUsuario) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         for (int i = 0; i < model.getRowCount(); i++) {
             if (nombreUsuario.equals(model.getValueAt(i, 1))) {
                 return true;
@@ -218,7 +217,7 @@ private boolean buscarUsuario(String nombreUsuario) {
 
         return false;
     }
-        
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Agregar;
     private javax.swing.JButton Restablecer;

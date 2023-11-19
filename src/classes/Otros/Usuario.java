@@ -165,6 +165,7 @@ public class Usuario {
             PreparedStatement statement = connection.getConnection().prepareStatement(REGISTRAR_STATEMENT);
                 statement.setString(index++,getNombreUsuario());
                 statement.setString(index++,getCorreo());
+                statement.setString(index++, getContrasena());
                 statement.setDate(index++,getFechaNacimiento());
                 statement.setString(index++,TemporalPwdGenerator());
                 statement.setInt(index++,getTelefono());
