@@ -6,29 +6,23 @@
 package componentes;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import modales.DevolucionBuscarCodigo;
-import modales.DevolucionBuscarUsuario;
+import classes.Otros.Prestamo;
 
 /**
  *
  * @author Oliver
  */
 public class realizarDevolucion extends javax.swing.JPanel {
-
+    private Prestamo prestamo = new Prestamo();
     /**
      * Creates new form realizarDevolucion
      */
     public realizarDevolucion() {
         initComponents();
     }
-
-    private void desplegarModal(JPanel vista) {
-        vista.setSize(600, 700);
-        JFrame modal = new JFrame();
-        modal.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        modal.add(vista);
-        modal.pack();
-        modal.setVisible(true);
+    
+    private void buscarPrestamo() {
+        //float mora = prestamo.calcularMora(fechaDevolucionReal);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -40,9 +34,6 @@ public class realizarDevolucion extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        btnNombreUsuario = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         pnlDetalleContenido = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblContenido = new javax.swing.JTable();
@@ -56,30 +47,15 @@ public class realizarDevolucion extends javax.swing.JPanel {
         lblEstado = new javax.swing.JLabel();
         txtEstado = new javax.swing.JTextField();
         btnRegistar = new javax.swing.JButton();
+        lnlBuscarTitulo = new javax.swing.JLabel();
+        txtCodigoPrestamo = new javax.swing.JTextField();
+        btnBuscarPrestamo = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setMinimumSize(new java.awt.Dimension(1030, 640));
         setPreferredSize(new java.awt.Dimension(1030, 640));
 
         jLabel1.setText("Realizar devoluciones");
-
-        jLabel2.setText("Para buscar un préstamo, puede buscar usando el nombre del usuario o directamente el código del préstamo a devolver");
-
-        btnNombreUsuario.setText("Buscar por usuario");
-        btnNombreUsuario.setPreferredSize(new java.awt.Dimension(150, 50));
-        btnNombreUsuario.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNombreUsuarioActionPerformed(evt);
-            }
-        });
-
-        jButton1.setText("Buscar por ticket");
-        jButton1.setPreferredSize(new java.awt.Dimension(150, 50));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         pnlDetalleContenido.setBackground(new java.awt.Color(255, 255, 255));
         pnlDetalleContenido.setLayout(new java.awt.GridBagLayout());
@@ -184,6 +160,18 @@ public class realizarDevolucion extends javax.swing.JPanel {
                 .addGap(30, 30, 30))
         );
 
+        lnlBuscarTitulo.setText("Ingresa el código del préstamo:");
+
+        btnBuscarPrestamo.setText("Búscar préstamo");
+        btnBuscarPrestamo.setMaximumSize(new java.awt.Dimension(250, 50));
+        btnBuscarPrestamo.setMinimumSize(new java.awt.Dimension(250, 50));
+        btnBuscarPrestamo.setPreferredSize(new java.awt.Dimension(250, 50));
+        btnBuscarPrestamo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarPrestamoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -194,69 +182,57 @@ public class realizarDevolucion extends javax.swing.JPanel {
                         .addGap(438, 438, 438)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(136, 136, 136)
-                        .addComponent(jLabel2)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(pnlDetalleContenido, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(195, 195, 195)
-                .addComponent(btnNombreUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(247, 247, 247))
+                        .addContainerGap()
+                        .addComponent(pnlDetalleContenido, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(260, 260, 260)
+                        .addComponent(lnlBuscarTitulo)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCodigoPrestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBuscarPrestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(jLabel1)
+                .addGap(41, 41, 41)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lnlBuscarTitulo)
+                    .addComponent(txtCodigoPrestamo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(btnBuscarPrestamo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel2)
-                        .addGap(112, 112, 112)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(pnlDetalleContenido, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(62, 62, 62)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnNombreUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(61, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pnlDetalleContenido, javax.swing.GroupLayout.PREFERRED_SIZE, 391, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnNombreUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNombreUsuarioActionPerformed
-        DevolucionBuscarUsuario buscarUsuario = new DevolucionBuscarUsuario();
-        this.desplegarModal(buscarUsuario);
-    }//GEN-LAST:event_btnNombreUsuarioActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        DevolucionBuscarCodigo buscarCodigo = new DevolucionBuscarCodigo();
-        this.desplegarModal(buscarCodigo);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnBuscarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPrestamoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBuscarPrestamoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnNombreUsuario;
+    private javax.swing.JButton btnBuscarPrestamo;
     private javax.swing.JButton btnRegistar;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblEstado;
     private javax.swing.JLabel lblFechaEntrega;
     private javax.swing.JLabel lblMora;
     private javax.swing.JLabel lblTotal;
+    private javax.swing.JLabel lnlBuscarTitulo;
     private javax.swing.JPanel pnlDetalleContenido;
     private javax.swing.JTable tblContenido;
+    private javax.swing.JTextField txtCodigoPrestamo;
     private javax.swing.JTextField txtEstado;
     private javax.swing.JTextField txtFechaEntrega;
     private javax.swing.JTextField txtMora;

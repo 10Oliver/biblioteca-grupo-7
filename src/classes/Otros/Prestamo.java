@@ -162,7 +162,7 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
         }
     }
 
-    private float calcularMora(Date fechaDevolucionReal) {
+    public float calcularMora(Date fechaDevolucionReal) {
         // ... (lógica de cálculo de mora)
         Date fechaActual = new Date();
 
