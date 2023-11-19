@@ -41,7 +41,7 @@ public class realizarDevolucion extends javax.swing.JPanel {
 
     private void actualizarMora(List<Prestamo> productos) {
         for (Prestamo item : productos) {
-            prestamo.procesarDevolucion(con, item.getId(), item.getCodigoEjemplar());
+            prestamo.procesarDevolucion(con, item.getId(), item.getCodigoEjemplar(), item.getFechaDevolucion());
         }
     }
     
@@ -50,6 +50,7 @@ public class realizarDevolucion extends javax.swing.JPanel {
         for (Prestamo item : productos) {
             datos.add(this.obtenerContenido(item.getCodigoEjemplar(),item.getMora()));
             this.codigoProductos.add(item.getCodigoEjemplar());
+            this.totalMora = this.totalMora + item.getMora();
         }
 
         Vector<Object> columnasTabla = new Vector<>(Arrays.asList(this.columnas));
@@ -115,6 +116,17 @@ public class realizarDevolucion extends javax.swing.JPanel {
         }
         fila.add(mora);
         return fila;
+    }
+    
+    private void limpiarCampos() {
+        txtTotal.setText("");
+        txtFechaEntrega.setText("");
+        txtEstado.setText("");
+        txtMora.setText("");
+        txtCodigoPrestamo.setText("");
+        for (int i = 0; i < tblContenido.getRowCount(); i++) {
+            tblContenido.remove(i);
+        }
     }
     
     private void cargarDatosPanel(List<Prestamo> listaProductos) {
@@ -346,6 +358,7 @@ public class realizarDevolucion extends javax.swing.JPanel {
     private void btnRegistarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistarActionPerformed
         this.prestamo.devolverRecursos(con, this.codigoProductos, this.codigoPrestamosGlobal);
         JOptionPane.showMessageDialog(null, "Se ha devuelto todos los productos del préstamo.", "Préstamo devuelto.", JOptionPane.INFORMATION_MESSAGE);
+        this.limpiarCampos();
     }//GEN-LAST:event_btnRegistarActionPerformed
 
 
