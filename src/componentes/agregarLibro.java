@@ -5,19 +5,41 @@
  */
 package componentes;
 
+import classes.Conexion.ConnectionDb;
+import classes.Otros.Estante;
+import classes.RecursosFisicosFolder.Libro;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Oliver
  */
 public class agregarLibro extends javax.swing.JPanel {
+    private Estante estante = new Estante();
+    private ConnectionDb con = new ConnectionDb();
+    private Map<String, Integer> estantesMap = new HashMap<>();
 
     /**
      * Creates new form agregarLibro
      */
     public agregarLibro() {
         initComponents();
+        this.cargarEstantes();
     }
 
+    private void cargarEstantes() {
+        List<Estante> estantes = estante.selectAllEstantes(con);
+        cmbEstante.removeAllItems();
+        for (Estante item: estantes) {
+            cmbEstante.addItem(item.getNombreEstante());
+            estantesMap.put(item.getNombreEstante(), item.getId());
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,21 +49,267 @@ public class agregarLibro extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        txtTitulo = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txtAutor = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        txtEditorial = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        txtNumPaginas = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txtIsbn = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        txtEdicion = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        txtLugar = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        txtFecha = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        txtGenero = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        txtIdioma = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        txtNotas = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        txtStock = new javax.swing.JTextField();
+        btnRegistrar = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
+        cmbEstante = new javax.swing.JComboBox<>();
+
         setMinimumSize(new java.awt.Dimension(1030, 640));
+
+        jLabel1.setText("Agregar un nuevo libro");
+
+        jLabel2.setText("Titulo");
+
+        jLabel3.setText("Autor");
+
+        jLabel4.setText("Editorial");
+
+        jLabel5.setText("Número de páginas");
+
+        jLabel6.setText("ISBN");
+
+        jLabel7.setText("Edición");
+
+        jLabel8.setText("Lugar de publicación");
+
+        jLabel9.setText("Fecha de publicación");
+
+        jLabel10.setText("Genero");
+
+        jLabel11.setText("Idioma");
+
+        jLabel12.setText("Notas");
+
+        jLabel13.setText("Stock");
+
+        btnRegistrar.setText("Registrar");
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
+
+        jLabel14.setText("Estante");
+
+        cmbEstante.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1030, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(436, 436, 436)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnRegistrar)
+                    .addComponent(jLabel1))
+                .addContainerGap(463, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel14)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(cmbEstante, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtNotas, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(txtGenero, javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                    .addComponent(txtLugar, javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                            .addComponent(txtIsbn, javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                                    .addComponent(txtEditorial, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
+                                                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                                                                    .addComponent(txtTitulo, javax.swing.GroupLayout.Alignment.LEADING))
+                                                                .addComponent(jLabel4)))
+                                                        .addComponent(jLabel6)))
+                                                .addComponent(jLabel8)))
+                                        .addComponent(jLabel10)))
+                                .addComponent(jLabel12)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel3)
+                            .addComponent(txtAutor)
+                            .addComponent(jLabel5)
+                            .addComponent(txtNumPaginas)
+                            .addComponent(jLabel7)
+                            .addComponent(txtEdicion)
+                            .addComponent(jLabel9)
+                            .addComponent(txtFecha)
+                            .addComponent(jLabel11)
+                            .addComponent(txtIdioma, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+                            .addComponent(jLabel13)
+                            .addComponent(txtStock))
+                        .addGap(99, 99, 99))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 640, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAutor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtEditorial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNumPaginas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtIsbn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtEdicion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel9))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtLugar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtIdioma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel13))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNotas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(34, 34, 34)
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cmbEstante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addComponent(btnRegistrar)
+                .addGap(24, 24, 24))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        Date fechaSql = null;
+        int stock = 0;
+        int estante = 0;
+        try {
+            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date fechaPublicacion = formato.parse(txtFecha.getText());
+            fechaSql = new Date(fechaPublicacion.getTime());
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            JOptionPane.showMessageDialog(null, "La fecha de publicación no es válida", "Fecha incorrecta", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        try {
+            stock = Integer.parseInt(txtStock.getText());
+        } catch(Exception e) {
+            JOptionPane.showMessageDialog(null, "La cantidad de stock no es válida.", "Valor incorrecto", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        try {
+            estante = this.estantesMap.get(cmbEstante.getSelectedItem().toString());
+        } catch(Exception e) {
+            JOptionPane.showMessageDialog(null, "El estante no es válido", "Valor incorrecto", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        Libro libro = new Libro();
+        libro.setTitulo(txtTitulo.getText());
+        libro.setAutor(txtAutor.getText());
+        libro.setEditorial(txtEditorial.getText());
+        libro.setNumeroPaginas(Integer.parseInt(txtNumPaginas.getText()));
+        libro.setIsbn(Integer.parseInt(txtIsbn.getText()));
+        libro.setEdicion(txtEdicion.getText());
+        libro.setLugarPublicacion(txtLugar.getText());
+        libro.setFechaPublicacion(fechaSql);
+        libro.setGenero(txtGenero.getText());
+        libro.setIdioma(txtIdioma.getText());
+        libro.setNotas(txtNotas.getText());
+        libro.setStock(stock);
+        libro.setNombreEstante(String.valueOf(estante));
+        libro.insertLibro(con);
+        JOptionPane.showMessageDialog(null, "Se ha registrado el nuevo libro", "Libro registrado", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnRegistrarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRegistrar;
+    private javax.swing.JComboBox<String> cmbEstante;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JTextField txtAutor;
+    private javax.swing.JTextField txtEdicion;
+    private javax.swing.JTextField txtEditorial;
+    private javax.swing.JTextField txtFecha;
+    private javax.swing.JTextField txtGenero;
+    private javax.swing.JTextField txtIdioma;
+    private javax.swing.JTextField txtIsbn;
+    private javax.swing.JTextField txtLugar;
+    private javax.swing.JTextField txtNotas;
+    private javax.swing.JTextField txtNumPaginas;
+    private javax.swing.JTextField txtStock;
+    private javax.swing.JTextField txtTitulo;
     // End of variables declaration//GEN-END:variables
 }
