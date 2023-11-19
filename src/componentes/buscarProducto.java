@@ -5,19 +5,48 @@
  */
 package componentes;
 
+import classes.Conexion.ConnectionDb;
+import classes.RecursosDigitalesFolder.Cd;
+import classes.RecursosDigitalesFolder.Ebook;
+import classes.RecursosDigitalesFolder.Pelicula;
+import classes.RecursosFisicosFolder.Libro;
+import classes.RecursosFisicosFolder.Periodico;
+import classes.RecursosFisicosFolder.Revista;
+import classes.RecursosFisicosFolder.Tesis;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Oliver
  */
 public class buscarProducto extends javax.swing.JPanel {
 
+ 
+ 
+
     /**
      * Creates new form buscarProducto
      */
     public buscarProducto() {
-        initComponents();
+        initComponents(); //ayuda a iniciar todos los metodos 
+        
+         DefaultTableModel dtm = new DefaultTableModel();
+            
+            //seguir agui 
+            
     }
-
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,7 +69,7 @@ public class buscarProducto extends javax.swing.JPanel {
 
         jLabel1.setText("Ingresar producto");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CD", "Ebook", "Libro", "Pelicula", "Periodico", "Revista", "Tesis" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Libro", "Ebook", "Periodico", "Tesis", "Pelicula", "Cd", "Revista" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -62,15 +91,20 @@ public class buscarProducto extends javax.swing.JPanel {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Id", "Codigo", "Titulo"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -112,21 +146,141 @@ public class buscarProducto extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
+        
+        //finaliza aqui
     }//GEN-LAST:event_jComboBox1ActionPerformed
-
+       
+    //metodo para agregar a las filas de la JTABLE:
+    
+  
+    
+    
     private void txt1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt1ActionPerformed
         // TODO add your handling code here:
+     
     }//GEN-LAST:event_txt1ActionPerformed
-
+    
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+     
+          DefaultTableModel dtm = new DefaultTableModel();   // DTM ES LA TABLA
+                      dtm = (DefaultTableModel) jTable1.getModel();
+                      
+   
+
+        ConnectionDb connection = new ConnectionDb();
         String opcion = jComboBox1.getSelectedItem().toString();
-        String datobuscar = txt1.getText();        
+            String datobuscar = txt1.getText();
+              
+       
+            switch (opcion){
+                case "Libro":
+                    Libro miLibro = new Libro(datobuscar);
+                    miLibro.selectLibro(connection);
+                    Object [] ob = new Object[3];
+                    ob [0] = miLibro.getId();
+                    ob [1] = miLibro.getTitulo();
+                    ob [2] = miLibro.getCodigoIdentificacion();
+                    dtm.addRow(ob);
+                 
+                    break;
+                    
+                case "Ebook":
+                    Ebook miEbook = new Ebook(datobuscar);
+                    miEbook.selectEbook(connection);
+                    Object [] ob1 = new Object[3];
+                    ob1 [0] = miEbook.getId();
+                    ob1 [1] = miEbook.getTitulo();
+                    ob1 [2] = miEbook.getCodigoIdentificacion();
+                    dtm.addRow(ob1);
+                 
+                    break;
+                    
+                    
+                    
+                case "Periodico":
+                    Periodico miPeriodico = new Periodico(datobuscar);
+                    miPeriodico.selectPeriodico(connection);
+                     
+                     Object [] ob2 = new Object[3];
+                    ob2 [0] = miPeriodico.getId();
+                    ob2 [1] = miPeriodico.getTitulo();
+                    ob2 [2] = miPeriodico.getCodigoIdentificacion();
+                    dtm.addRow(ob2);
+                    break;
+                    
+                case "Tesis":
+                    Tesis miTesis = new Tesis(datobuscar);
+                    miTesis.selectTesis(connection);
+                   
+                    Object [] ob3 = new Object[3];
+                    ob3 [0] = miTesis.getId();
+                    ob3 [1] = miTesis.getTitulo();
+                    ob3 [2] = miTesis.getCodigoIdentificacion();
+                    dtm.addRow(ob3);
+                    break;
+             
+                case "Pelicula":
+                    Pelicula miPelicula = new Pelicula(datobuscar);
+                    miPelicula.selectPelicula(connection);
+                    Object [] ob4 = new Object[3];
+                    ob4 [0] = miPelicula.getId();
+                    ob4 [1] = miPelicula.getTitulo();
+                    ob4 [2] = miPelicula.getCodigoIdentificacion();
+                    dtm.addRow(ob4);
+                    break; 
+                    
+                case "Cd":
+                    Cd miCd = new Cd(datobuscar);
+                    miCd.selectCd(connection);
+                   
+                    
+                     Object [] ob5 = new Object[3];
+                    ob5 [0] = miCd.getId();
+                    ob5 [1] = miCd.getTitulo();
+                    ob5 [2] = miCd.getCodigoIdentificacion();
+                    dtm.addRow(ob5);
+             
+                       System.out.println(miCd.getTitulo());
+                       System.out.println(miCd.getCodigoIdentificacion());
+                       System.out.println(miCd.getId());
+                       
+                    
+                   
+                      break;
+             
+               
+                        
+                case "Revista":
+                    Revista miRevista = new Revista(datobuscar);
+                    miRevista.selectRevista(connection);
+                    Object [] ob6 = new Object[3];
+                    ob6 [0] = miRevista.getId();
+                    ob6 [1] = miRevista.getTitulo();
+                    ob6 [2] = miRevista.getCodigoIdentificacion();
+                    dtm.addRow(ob6);
+                    
+                 
+                    
+                    break; 
+                    
+                default:
+                    break;
+            } 
+            //NO BORRAR ESTE CORCHETE KEVIN 
     }//GEN-LAST:event_jButton1ActionPerformed
-
-
+    //NO BORRAR ESTE CORCHETE KEVIN 
+    
+    private void actualizarTabla(DefaultTableModel dtm) {
+    // Elimina todas las filas existentes en la tabla
+    while (dtm.getRowCount() > 0) {
+        dtm.removeRow(0);
+    }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;

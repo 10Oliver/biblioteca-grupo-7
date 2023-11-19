@@ -7,6 +7,8 @@ import java.util.List;
 
 import classes.Conexion.ConnectionDb;
 
+import java.sql.Connection;
+
 public class ParametroMora {
     private int idParametros;
     private float mora;

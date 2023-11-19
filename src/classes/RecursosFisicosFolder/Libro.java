@@ -123,7 +123,7 @@ public class Libro extends RecursosFisicos {
 public Libro selectLibro(ConnectionDb connection) {
     Libro libro = null;
     try {
-        PreparedStatement statement = connection.getConnection().prepareStatement(SELECT_SINGLE_STATEMENT);
+        PreparedStatement statement = ConnectionDb.getConnection().prepareStatement(SELECT_SINGLE_STATEMENT);
         statement.setString(1, getCodigoIdentificacion());
         ResultSet resultSet = statement.executeQuery();
 
