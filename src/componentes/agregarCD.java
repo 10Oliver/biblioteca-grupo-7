@@ -5,6 +5,19 @@
  */
 package componentes;
 
+import java.awt.event.ActionEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
+import classes.Conexion.ConnectionDb;
+import classes.Otros.Estante;
+import classes.RecursosDigitalesFolder.Cd;
+
 /**
  *
  * @author Oliver
@@ -14,8 +27,12 @@ public class agregarCD extends javax.swing.JPanel {
     /**
      * Creates new form agregarCD
      */
+    ConnectionDb connection = new ConnectionDb();
+    Map<Integer, String> mapaEstantes = new HashMap<>();
     public agregarCD() {
         initComponents();
+
+
     }
 
     /**
@@ -27,21 +44,215 @@ public class agregarCD extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        tituloLabel = new javax.swing.JLabel();
+        autorLabel = new javax.swing.JLabel();
+        numCancionesLabel = new javax.swing.JLabel();
+        GeneroLabel = new javax.swing.JLabel();
+        fechaLabel = new javax.swing.JLabel();
+        cantidadLabel = new javax.swing.JLabel();
+        estanteLabel = new javax.swing.JLabel();
+        estanteField = new javax.swing.JComboBox<>();
+        tituloField = new javax.swing.JTextField();
+        autorField = new javax.swing.JTextField();
+        numCancionesField = new javax.swing.JTextField();
+        generoField = new javax.swing.JTextField();
+        cantidadField = new javax.swing.JTextField();
+        fechaField = new javax.swing.JFormattedTextField();
+        insertarCd = new javax.swing.JButton();
+
         setMinimumSize(new java.awt.Dimension(1030, 640));
+
+        tituloLabel.setText("Titulo");
+
+        autorLabel.setText("Autor");
+
+        numCancionesLabel.setText("Numero de Canciones");
+
+        GeneroLabel.setText("Genero");
+
+        fechaLabel.setText("Fecha de Publicacion");
+
+        cantidadLabel.setText("Cantidad Disponible");
+
+        estanteLabel.setText("Estante");
+
+
+        Estante estante = new Estante();
+        List<Estante> todosEstantes = estante.selectAllEstantes(connection);
+//        List<String> listaEstantes = new ArrayList<>();
+        Vector<String> listaEstantes = new Vector<>();
+        for (Estante estanteLoop : todosEstantes) {
+            // Suponemos que la clase Estante tiene un método getId() que devuelve el ID
+            int idEstante = estanteLoop.getId();
+            mapaEstantes.put(estanteLoop.getId(), estanteLoop.getNombreEstante());
+            listaEstantes.add(estanteLoop.getNombreEstante());
+        }
+        estanteField.setModel(new javax.swing.DefaultComboBoxModel<>(listaEstantes));
+        estanteField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                estanteFieldActionPerformed(evt);
+            }
+        });
+
+        tituloField.setText("Titulo");
+
+        autorField.setText("Autor");
+
+        numCancionesField.setText("0");
+
+        generoField.setText("Genero");
+
+        cantidadField.setText("0");
+
+        fechaField.setText("1999/04/23");
+
+        insertarCd.setText("Insertar Cd");
+        insertarCd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
+                    insertarCdActionPerformed(evt);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1030, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(147, 147, 147)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(fechaLabel)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(numCancionesLabel)
+                                .addGap(89, 89, 89)
+                                .addComponent(numCancionesField, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(GeneroLabel)
+                                .addGap(176, 176, 176)
+                                .addComponent(generoField, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tituloLabel)
+                                    .addComponent(autorLabel))
+                                .addGap(187, 187, 187)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(autorField)
+                                    .addComponent(tituloField)))
+                            .addComponent(insertarCd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(estanteLabel)
+                            .addComponent(cantidadLabel))
+                        .addGap(99, 99, 99)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cantidadField)
+                            .addComponent(estanteField, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(fechaField, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                                .addContainerGap())))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 640, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(59, 59, 59)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(tituloLabel)
+                    .addComponent(tituloField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(autorLabel)
+                            .addComponent(autorField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(numCancionesLabel)
+                            .addComponent(numCancionesField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(GeneroLabel)
+                            .addComponent(generoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(fechaLabel)
+                            .addComponent(fechaField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cantidadLabel)
+                            .addComponent(cantidadField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(estanteLabel))
+                    .addComponent(estanteField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32)
+                .addComponent(insertarCd)
+                .addContainerGap(299, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void estanteFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_estanteFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_estanteFieldActionPerformed
+
+    private void insertarCdActionPerformed(ActionEvent evt) throws ParseException {//GEN-FIRST:event_insertarCdActionPerformed
+     String pattern = "yyyy-MM-dd"; // Adjust the pattern based on your date format
+    String fecha = fechaField.getText();
+    String titulo = tituloField.getText();
+    String autor = autorField.getText();
+    String numCanciones = numCancionesField.getText();
+    String genero = generoField.getText();
+    Date fechaPublicacion = new SimpleDateFormat("yyyy/mm/dd").parse(fecha);
+    String cantidad = cantidadField.getText();
+    String estante = estanteField.getSelectedItem().toString();
+    java.sql.Date sqlDate = new java.sql.Date(fechaPublicacion.getTime());
+    String idEstante = "";
+
+        for (Map.Entry<Integer, String> entry : mapaEstantes.entrySet()) {
+            if (entry.getValue().equals(estante)) {
+                int foundKey = entry.getKey();
+                idEstante = String.valueOf(foundKey);
+                System.out.println("Key found: " + foundKey);
+                // You can use 'foundKey' as needed
+                break; // Assuming you want to stop searching after finding the first match
+            }
+        }
+
+//    Cd nuevoCd = new Cd(titulo, autor, numCanciones, genero, fecha, cantidad, estante);
+    Cd nuevoCd = new Cd(titulo, sqlDate, Integer.parseInt(cantidad), idEstante, genero, autor, numCanciones);
+    nuevoCd.insertCd(connection);
+    }//GEN-LAST:event_insertarCdActionPerformed
+private void clearFields() {
+    tituloField.setText("");
+    autorField.setText("");
+    numCancionesField.setText("");
+    generoField.setText("");
+    fechaField.setText("");
+    cantidadField.setText("");
+    // Optionally, you can set a default or select the first item in the estanteField
+    estanteField.setSelectedIndex(0);
+}
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel GeneroLabel;
+    private javax.swing.JTextField autorField;
+    private javax.swing.JLabel autorLabel;
+    private javax.swing.JTextField cantidadField;
+    private javax.swing.JLabel cantidadLabel;
+    private javax.swing.JComboBox<String> estanteField;
+    private javax.swing.JLabel estanteLabel;
+    private javax.swing.JFormattedTextField fechaField;
+    private javax.swing.JLabel fechaLabel;
+    private javax.swing.JTextField generoField;
+    private javax.swing.JButton insertarCd;
+    private javax.swing.JTextField numCancionesField;
+    private javax.swing.JLabel numCancionesLabel;
+    private javax.swing.JTextField tituloField;
+    private javax.swing.JLabel tituloLabel;
     // End of variables declaration//GEN-END:variables
 }
