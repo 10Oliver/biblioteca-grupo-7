@@ -26,8 +26,10 @@ public class realizarDevolucion extends javax.swing.JPanel {
 
     private Prestamo prestamo = new Prestamo();
     private List<Prestamo> productosPrestados = new ArrayList<>();
+    private List<String> codigoProductos = new ArrayList<>();
     private ConnectionDb con = new ConnectionDb();
-    private String[] columnas = {"Código de identificación", "Titulo", "Tipo de producto"};
+    private String codigoPrestamosGlobal = "";
+    private String[] columnas = {"Código de identificación", "Titulo", "Tipo de producto", "Mora"};
     private float totalMora = 0;
 
     /**
@@ -46,7 +48,8 @@ public class realizarDevolucion extends javax.swing.JPanel {
     private DefaultTableModel cargarTabla(List<Prestamo> productos) {
         Vector<Vector<Object>> datos = new Vector<>();
         for (Prestamo item : productos) {
-            datos.add(this.obtenerContenido(item.getCodigoEjemplar()));
+            datos.add(this.obtenerContenido(item.getCodigoEjemplar(),item.getMora()));
+            this.codigoProductos.add(item.getCodigoEjemplar());
         }
 
         Vector<Object> columnasTabla = new Vector<>(Arrays.asList(this.columnas));
@@ -54,56 +57,63 @@ public class realizarDevolucion extends javax.swing.JPanel {
         return contenido;
     }
 
-    private Vector<Object> obtenerContenido(String codigo) {
+    private Vector<Object> obtenerContenido(String codigo, float mora) {
         Vector<Object> fila = new Vector<>();
         String tipoProducto = String.valueOf(codigo.charAt(0)) + String.valueOf(codigo.charAt(1)) + String.valueOf(codigo.charAt(2));
         switch (tipoProducto) {
             case "LIB":
-                Libro libro = new Libro(tipoProducto);
+                Libro libro = new Libro(codigo);
                 Libro libroSeleccionado = libro.selectLibro(con);
                 fila.add(libroSeleccionado.getCodigoIdentificacion());
                 fila.add(libroSeleccionado.getTitulo());
+                fila.add("Libro");
                 break;
             case "REV":
-                Revista revista = new Revista(tipoProducto);
+                Revista revista = new Revista(codigo);
                 Revista revistaSeleccionada = revista.selectRevista(con);
                 fila.add(revistaSeleccionada.getCodigoIdentificacion());
                 fila.add(revistaSeleccionada.getTitulo());
+                fila.add("Revista");
                 break;
             case "CDA":
-                Cd cd = new Cd(tipoProducto);
+                Cd cd = new Cd(codigo);
                 Cd cdSeleccionado = cd.selectCd(con);
                 fila.add(cdSeleccionado.getCodigoIdentificacion());
                 fila.add(cdSeleccionado.getTitulo());
+                fila.add("CD");
                 break;
             case "PEL":
-                Pelicula pelicula = new Pelicula(tipoProducto);
+                Pelicula pelicula = new Pelicula(codigo);
                 Pelicula peliculaSeleccionada = pelicula.selectPelicula(con);
                 fila.add(peliculaSeleccionada.getCodigoIdentificacion());
                 fila.add(peliculaSeleccionada.getTitulo());
+                fila.add("Pelicula");
                 break;
             case "EBK":
-                Ebook ebook = new Ebook(tipoProducto);
+                Ebook ebook = new Ebook(codigo);
                 Ebook ebookSeleccionado = ebook.selectEbook(con);
                 fila.add(ebookSeleccionado.getCodigoIdentificacion());
                 fila.add(ebookSeleccionado.getTitulo());
+                fila.add("EBook");
                 break;
             case "PER":
-                Periodico periodico = new Periodico(tipoProducto);
+                Periodico periodico = new Periodico(codigo);
                 Periodico periodicoSeleccionado = periodico.selectPeriodico(con);
                 fila.add(periodicoSeleccionado.getCodigoIdentificacion());
                 fila.add(periodicoSeleccionado.getTitulo());
                 break;
             case "TES":
-                Tesis tesis = new Tesis(tipoProducto);
+                Tesis tesis = new Tesis(codigo);
                 Tesis tesisSeleccionado = tesis.selectTesis(con);
                 fila.add(tesisSeleccionado.getCodigoIdentificacion());
                 fila.add(tesisSeleccionado.getTitulo());
+                fila.add("Tesis");
                 break;
             default:
                 System.out.println("NO VALID CODE");
                 break;
         }
+        fila.add(mora);
         return fila;
     }
     
@@ -112,7 +122,7 @@ public class realizarDevolucion extends javax.swing.JPanel {
         Date fechaDevolucion = listaProductos.get(0).getFechaDevolucion();
         txtFechaEntrega.setText(String.valueOf(fechaDevolucion));
         String estado = "Vigente";
-        if (fechaDevolucion.after(new Date())) {
+        if (fechaDevolucion.before(new Date())) {
             estado = "Vencida";
         }
         txtEstado.setText(estado);
@@ -186,19 +196,22 @@ public class realizarDevolucion extends javax.swing.JPanel {
 
         lblMora.setText("Mora aplicada ($):");
 
-        txtMora.setText("0.00");
         txtMora.setMinimumSize(new java.awt.Dimension(100, 22));
         txtMora.setPreferredSize(new java.awt.Dimension(100, 22));
 
         lblEstado.setText("Estado del préstamo");
 
-        txtEstado.setText("Vigente");
         txtEstado.setMinimumSize(new java.awt.Dimension(150, 22));
         txtEstado.setName(""); // NOI18N
         txtEstado.setPreferredSize(new java.awt.Dimension(150, 22));
 
         btnRegistar.setText("Registrar devolución");
         btnRegistar.setPreferredSize(new java.awt.Dimension(200, 50));
+        btnRegistar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -313,7 +326,8 @@ public class realizarDevolucion extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "Debes de colocar el código del préstamo.", "Valor inválido", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        prestamo.setCodigoPrestamo(txtCodigoPrestamo.getText());
+        this.codigoPrestamosGlobal = txtCodigoPrestamo.getText();
+        prestamo.setCodigoPrestamo(this.codigoPrestamosGlobal);
         this.productosPrestados = prestamo.selectAllPrestamosByTransaction(con);
         if (this.productosPrestados.size() <= 0) {
             JOptionPane.showMessageDialog(null, "No se ha encontrado ningún préstamo con el código ingresado.", "Préstamo no encontrado.", JOptionPane.INFORMATION_MESSAGE);
@@ -323,11 +337,16 @@ public class realizarDevolucion extends javax.swing.JPanel {
         this.cargarDatosPanel(this.productosPrestados);
         this.actualizarMora(this.productosPrestados);
         // Se vuelven a obtner los productos con la mora ya actualizada
-        prestamo.setCodigoPrestamo(txtCodigoPrestamo.getText());
+        prestamo.setCodigoPrestamo(this.codigoPrestamosGlobal);
         this.productosPrestados = prestamo.selectAllPrestamosByTransaction(con);
         tblContenido.setModel(this.cargarTabla(this.productosPrestados));
         txtMora.setText(String.valueOf(totalMora));
     }//GEN-LAST:event_btnBuscarPrestamoActionPerformed
+
+    private void btnRegistarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistarActionPerformed
+        this.prestamo.devolverRecursos(con, this.codigoProductos, this.codigoPrestamosGlobal);
+        JOptionPane.showMessageDialog(null, "Se ha devuelto todos los productos del préstamo.", "Préstamo devuelto.", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnRegistarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
