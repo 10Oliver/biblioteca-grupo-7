@@ -16,12 +16,16 @@ import classes.Otros.ParametroMora;
 import classes.Otros.Usuario;
 import classes.RecursosDigitalesFolder.*;
 import classes.RecursosFisicosFolder.*;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -350,8 +354,12 @@ public class realizarPrestamo extends javax.swing.JPanel {
             }
             prestamos.setIdUsuario(this.userId);
             prestamos.setFechaDevolucion(fechaDevolver);
-            prestamos.procesarVariosPrestamos(this.obtenerCodigo());
-            JOptionPane.showMessageDialog(null, "Se ha guardado el préstamos", "¡Éxito!", JOptionPane.INFORMATION_MESSAGE);
+            String codigoAutorizacion = prestamos.procesarVariosPrestamos(this.obtenerCodigo());
+            // Se coloca en un JPanel para que se pueda copiar
+            JPanel panel = new JPanel(new GridLayout(2, 1));
+            panel.add(new JLabel("Se ha guarado el préstamo:"));
+            panel.add(new JTextField(codigoAutorizacion));
+            JOptionPane.showMessageDialog(null, panel, "¡Éxito!", JOptionPane.INFORMATION_MESSAGE);
             this.limpiarContenido();
         } catch (Exception exception) {
             System.out.println(exception);
