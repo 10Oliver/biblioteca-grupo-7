@@ -6,6 +6,13 @@
 package componentes;
 
 import classes.Conexion.ConnectionDb;
+import classes.RecursosDigitalesFolder.Cd;
+import classes.RecursosDigitalesFolder.Ebook;
+import classes.RecursosDigitalesFolder.Pelicula;
+import classes.RecursosFisicosFolder.Libro;
+import classes.RecursosFisicosFolder.Periodico;
+import classes.RecursosFisicosFolder.Revista;
+import classes.RecursosFisicosFolder.Tesis;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,18 +30,56 @@ import javax.swing.table.DefaultTableModel;
 public class buscarProducto extends javax.swing.JPanel {
 
     DefaultTableModel dtm = new DefaultTableModel();
-    Connection conn = null;
-    PreparedStatement stmt = null;
-    ResultSet rs = null;
-    
+
     /**
      * Creates new form buscarProducto
      */
     public buscarProducto() {
-        initComponents();
+        initComponents(); //ayuda a iniciar todos los metodos 
         
-        String [] cabezeras = new String [] {"id", "nombre","datos"};
-        dtm.setColumnIdentifiers(cabezeras);
+        ConnectionDb connection = new ConnectionDb();
+            String opcion = jComboBox1.getSelectedItem().toString();
+            String datobuscar = txt1.getText();
+       
+            switch (opcion){
+                case "Libro":
+                    Libro miLibro = new Libro(datobuscar);
+                    miLibro.selectLibro(connection);
+                    break; 
+                    
+                case "Ebook":
+                    Ebook miEbook = new Ebook(datobuscar);
+                    miEbook.selectEbook(connection);
+                    break;
+                    
+                case "Periodico":
+                    Periodico miPeriodico = new Periodico(datobuscar);
+                    miPeriodico.selectPeriodico(connection);
+                    break; 
+                    
+                case "Tesis":
+                    Tesis miTesis = new Tesis(datobuscar);
+                    miTesis.selectTesis(connection);
+                    break; 
+             
+                case "Pelicula":
+                    Pelicula miPelicula = new Pelicula(datobuscar);
+                    miPelicula.selectPelicula(connection);
+                    break; 
+                    
+                case "Cd":
+                    Cd miCd = new Cd(datobuscar);
+                    miCd.selectCd(connection);
+                    break; 
+                    
+                case "Revista":
+                    Revista miRevista = new Revista(datobuscar);
+                    miRevista.selectRevista(connection);
+                    break; 
+                    
+                default:
+                    break;
+            } 
     }
     
     
@@ -60,7 +105,7 @@ public class buscarProducto extends javax.swing.JPanel {
 
         jLabel1.setText("Ingresar producto");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CD", "Ebook", "Libro", "Pelicula", "Periodico", "Revista", "Tesis" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Libro", "Ebook", "Periodico", "Tesis", "Pelicula", "CD", "Revista", " " }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -145,28 +190,7 @@ public class buscarProducto extends javax.swing.JPanel {
     
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            // TODO add your handling code here:
-            
-            String opcion = jComboBox1.getSelectedItem().toString();
-            String datobuscar = txt1.getText();
-            
-            String SQL_SELECT = "SELECT * FROM " + opcion + " WHERE nombre_de_la_columna LIKE ?";
-            stmt = conn.prepareStatement(SQL_SELECT);
-            stmt.setString(1, "%" + datobuscar + "%");
-            rs = stmt.executeQuery();
-            
-            dtm.setRowCount(0);
-            
-            while (rs.next()) {
-            Object[] fila = new Object[]{rs.getInt("id"), rs.getString("nombre"), rs.getString("datos")};
-            dtm.addRow(fila);           
-            }
-            
-            } catch (SQLException e) {
-        e.printStackTrace();
-    } 
-            jTable1.setModel(dtm);
+     
             //NO BORRAR ESTE CORCHETE KEVIN 
     }//GEN-LAST:event_jButton1ActionPerformed
     //NO BORRAR ESTE CORCHETE KEVIN 
