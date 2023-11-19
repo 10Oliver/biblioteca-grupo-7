@@ -4,26 +4,120 @@
  * and open the template in the editor.
  */
 package componentes;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import classes.Otros.Prestamo;
-
+import classes.Conexion.ConnectionDb;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import classes.RecursosFisicosFolder.*;
+import classes.RecursosDigitalesFolder.*;
+import java.util.Date;
 /**
  *
  * @author Oliver
  */
 public class realizarDevolucion extends javax.swing.JPanel {
+
     private Prestamo prestamo = new Prestamo();
+    private List<Prestamo> productosPrestados = new ArrayList<>();
+    private ConnectionDb con = new ConnectionDb();
+    private String[] columnas = {"Código de identificación", "Titulo", "Tipo de producto"};
+    private float totalMora = 0;
+
     /**
      * Creates new form realizarDevolucion
      */
     public realizarDevolucion() {
         initComponents();
     }
-    
-    private void buscarPrestamo() {
-        //float mora = prestamo.calcularMora(fechaDevolucionReal);
+
+    private void actualizarMora(List<Prestamo> productos) {
+        for (Prestamo item : productos) {
+            prestamo.procesarDevolucion(con, item.getId(), item.getCodigoEjemplar());
+        }
     }
+    
+    private DefaultTableModel cargarTabla(List<Prestamo> productos) {
+        Vector<Vector<Object>> datos = new Vector<>();
+        for (Prestamo item : productos) {
+            datos.add(this.obtenerContenido(item.getCodigoEjemplar()));
+        }
+
+        Vector<Object> columnasTabla = new Vector<>(Arrays.asList(this.columnas));
+        DefaultTableModel contenido = new DefaultTableModel(datos, columnasTabla);
+        return contenido;
+    }
+
+    private Vector<Object> obtenerContenido(String codigo) {
+        Vector<Object> fila = new Vector<>();
+        String tipoProducto = String.valueOf(codigo.charAt(0)) + String.valueOf(codigo.charAt(1)) + String.valueOf(codigo.charAt(2));
+        switch (tipoProducto) {
+            case "LIB":
+                Libro libro = new Libro(tipoProducto);
+                Libro libroSeleccionado = libro.selectLibro(con);
+                fila.add(libroSeleccionado.getCodigoIdentificacion());
+                fila.add(libroSeleccionado.getTitulo());
+                break;
+            case "REV":
+                Revista revista = new Revista(tipoProducto);
+                Revista revistaSeleccionada = revista.selectRevista(con);
+                fila.add(revistaSeleccionada.getCodigoIdentificacion());
+                fila.add(revistaSeleccionada.getTitulo());
+                break;
+            case "CDA":
+                Cd cd = new Cd(tipoProducto);
+                Cd cdSeleccionado = cd.selectCd(con);
+                fila.add(cdSeleccionado.getCodigoIdentificacion());
+                fila.add(cdSeleccionado.getTitulo());
+                break;
+            case "PEL":
+                Pelicula pelicula = new Pelicula(tipoProducto);
+                Pelicula peliculaSeleccionada = pelicula.selectPelicula(con);
+                fila.add(peliculaSeleccionada.getCodigoIdentificacion());
+                fila.add(peliculaSeleccionada.getTitulo());
+                break;
+            case "EBK":
+                Ebook ebook = new Ebook(tipoProducto);
+                Ebook ebookSeleccionado = ebook.selectEbook(con);
+                fila.add(ebookSeleccionado.getCodigoIdentificacion());
+                fila.add(ebookSeleccionado.getTitulo());
+                break;
+            case "PER":
+                Periodico periodico = new Periodico(tipoProducto);
+                Periodico periodicoSeleccionado = periodico.selectPeriodico(con);
+                fila.add(periodicoSeleccionado.getCodigoIdentificacion());
+                fila.add(periodicoSeleccionado.getTitulo());
+                break;
+            case "TES":
+                Tesis tesis = new Tesis(tipoProducto);
+                Tesis tesisSeleccionado = tesis.selectTesis(con);
+                fila.add(tesisSeleccionado.getCodigoIdentificacion());
+                fila.add(tesisSeleccionado.getTitulo());
+                break;
+            default:
+                System.out.println("NO VALID CODE");
+                break;
+        }
+        return fila;
+    }
+    
+    private void cargarDatosPanel(List<Prestamo> listaProductos) {
+        txtTotal.setText(String.valueOf(listaProductos.size()));
+        Date fechaDevolucion = listaProductos.get(0).getFechaDevolucion();
+        txtFechaEntrega.setText(String.valueOf(fechaDevolucion));
+        String estado = "Vigente";
+        if (fechaDevolucion.after(new Date())) {
+            estado = "Vencida";
+        }
+        txtEstado.setText(estado);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -215,7 +309,24 @@ public class realizarDevolucion extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarPrestamoActionPerformed
-        // TODO add your handling code here:
+        if (txtCodigoPrestamo.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debes de colocar el código del préstamo.", "Valor inválido", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        prestamo.setCodigoPrestamo(txtCodigoPrestamo.getText());
+        this.productosPrestados = prestamo.selectAllPrestamosByTransaction(con);
+        if (this.productosPrestados.size() <= 0) {
+            JOptionPane.showMessageDialog(null, "No se ha encontrado ningún préstamo con el código ingresado.", "Préstamo no encontrado.", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        // Cargar datos iniciales
+        this.cargarDatosPanel(this.productosPrestados);
+        this.actualizarMora(this.productosPrestados);
+        // Se vuelven a obtner los productos con la mora ya actualizada
+        prestamo.setCodigoPrestamo(txtCodigoPrestamo.getText());
+        this.productosPrestados = prestamo.selectAllPrestamosByTransaction(con);
+        tblContenido.setModel(this.cargarTabla(this.productosPrestados));
+        txtMora.setText(String.valueOf(totalMora));
     }//GEN-LAST:event_btnBuscarPrestamoActionPerformed
 
 
