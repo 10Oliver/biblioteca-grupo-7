@@ -94,7 +94,7 @@ public class buscarProducto extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Id", "Titulo", "Codigo"
+                "Id", "Codigo", "Titulo"
             }
         ) {
             Class[] types = new Class [] {
@@ -248,7 +248,12 @@ public class buscarProducto extends javax.swing.JPanel {
                        System.out.println(miCd.getTitulo());
                        System.out.println(miCd.getCodigoIdentificacion());
                        System.out.println(miCd.getId());
-                     break;
+                       
+                    
+                   
+                      break;
+             
+               
                         
                 case "Revista":
                     Revista miRevista = new Revista(datobuscar);
@@ -270,7 +275,12 @@ public class buscarProducto extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton1ActionPerformed
     //NO BORRAR ESTE CORCHETE KEVIN 
     
-   
+    private void actualizarTabla(DefaultTableModel dtm) {
+    // Elimina todas las filas existentes en la tabla
+    while (dtm.getRowCount() > 0) {
+        dtm.removeRow(0);
+    }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
