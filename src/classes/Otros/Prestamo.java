@@ -339,7 +339,7 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
                 setMora(resultSet.getFloat("Mora"));
                 setCodigoEjemplar(resultSet.getString("CodigoEjemplar"));
                 setCodigoPrestamo(resultSet.getString("CodigoPrestamo"));
-                Prestamo prestamo = new Prestamo();
+                Prestamo prestamo = new Prestamo(getId(),getIdUsuario(),getFechaPrestamo(),getFechaDevolucion(),getFechaDevolucionReal(),getMora(),getCodigoEjemplar());
                 prestamos.add(prestamo);
             }
         } catch (SQLException e) {
@@ -366,7 +366,7 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
                 setMora(resultSet.getFloat("Mora"));
                 setCodigoEjemplar(resultSet.getString("CodigoEjemplar"));
                 setCodigoPrestamo(resultSet.getString("CodigoPrestamo"));
-                Prestamo prestamo = new Prestamo();
+                Prestamo prestamo = new Prestamo(getId(),getIdUsuario(),getFechaPrestamo(),getFechaDevolucion(),getFechaDevolucionReal(),getMora(),getCodigoEjemplar());
                 prestamos.add(prestamo);
             }
         } catch (SQLException e) {
@@ -394,7 +394,7 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
                 setMora(resultSet.getFloat("Mora"));
                 setCodigoEjemplar(resultSet.getString("CodigoEjemplar"));
                 setCodigoPrestamo(resultSet.getString("CodigoPrestamo"));
-                Prestamo prestamo = new Prestamo();
+                Prestamo prestamo = new Prestamo(getId(),getIdUsuario(),getFechaPrestamo(),getFechaDevolucion(),getFechaDevolucionReal(),getMora(),getCodigoEjemplar());
                 prestamos.add(prestamo);
             }
         } catch (SQLException e) {
@@ -421,7 +421,7 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
                 setMora(resultSet.getFloat("Mora"));
                 setCodigoEjemplar(resultSet.getString("CodigoEjemplar"));
                 setCodigoPrestamo(resultSet.getString("CodigoPrestamo"));
-                Prestamo prestamo = new Prestamo();
+                Prestamo prestamo = new Prestamo(getId(),getIdUsuario(),getFechaPrestamo(),getFechaDevolucion(),getFechaDevolucionReal(),getMora(),getCodigoEjemplar());
                 prestamos.add(prestamo);
             }
         } catch (SQLException e) {
