@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.UUID;
 
 import classes.Conexion.ConnectionDb;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 
 public class Prestamo {
@@ -100,7 +103,7 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
         return fechaDevolucion;
     }
     public java.sql.Date getFechaDevolucionSql() {
-        return (java.sql.Date) fechaDevolucion;
+        return new java.sql.Date(fechaDevolucion.getTime());
     }
 
     public void setFechaDevolucion(Date fechaDevolucion) {
@@ -151,13 +154,15 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
         throw new SQLException("No se pudo encontrar el préstamo.");
     }
 
-    public void procesarDevolucion(ConnectionDb connection, int idPrestamo, String codigoEjemplar) {
+    public void procesarDevolucion(ConnectionDb connection, int idPrestamo, String codigoEjemplar, Date fecha) {
         try {
-            Date fechaDevolucionReal = obtenerFechaDevolucionReal(connection, idPrestamo, codigoEjemplar);
+            // Date fechaDevolucionReal = obtenerFechaDevolucionReal(connection, idPrestamo, codigoEjemplar);
 
-            if (fechaDevolucionReal != null && fechaDevolucionReal.after(new Date())) {
+            Date ahora = new Date();
+            // if (fechaDevolucionReal != null && fechaDevolucionReal.after(new Date())) {
+            if (ahora != null && ahora.after(fecha)) {
                 // ... (cálculo de mora)
-                float moraTotal = calcularMora(fechaDevolucionReal);
+                float moraTotal = calcularMora(fecha);
 
                 // Actualizar la mora en la tabla Prestamos
                 actualizarMora(connection, idPrestamo, codigoEjemplar, moraTotal);
@@ -172,18 +177,19 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
         }
     }
 
-    private float calcularMora(Date fechaDevolucionReal) {
+    public float calcularMora(Date fechaDevolucionReal) {
         // ... (lógica de cálculo de mora)
         Date fechaActual = new Date();
-
+        Date fechaDevolucion = new Timestamp(fechaDevolucionReal.getTime());
+        
         // Calcular la diferencia en días entre la fecha de devolución real y la fecha actual
-        long diasRetraso = ChronoUnit.DAYS.between(fechaDevolucionReal.toInstant(), fechaActual.toInstant());
+        long diasRetraso = ChronoUnit.DAYS.between(fechaDevolucion.toInstant(), fechaActual.toInstant());
 
-        float moraDiariaPorAño = 0.5f;
-
+        float moraDiariaPorAño = 13.5f;
+        float dias = Float.valueOf(diasRetraso);
         // Calcular la mora total
-        float moraTotal = (diasRetraso / 365) * moraDiariaPorAño;
-
+        float moraTotal = (dias / 365);
+        moraTotal = Math.round(moraTotal * moraDiariaPorAño)/100f;
         return moraTotal;
     }
 
@@ -313,7 +319,7 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
 
     private void EliminarPrestamo(ConnectionDb connection, String codigoPrestamo) {
         try {
-            String deleteQuery = "DELETE FROM Prestamos WHERE AND CodigoPrestamo = ?";
+            String deleteQuery = "DELETE FROM Prestamos WHERE CodigoPrestamo = ?";
             try (PreparedStatement deleteStatement = connection.getConnection().prepareStatement(deleteQuery)) {
                 deleteStatement.setString(1, codigoPrestamo);
                 deleteStatement.executeUpdate();
@@ -339,7 +345,7 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
                 setMora(resultSet.getFloat("Mora"));
                 setCodigoEjemplar(resultSet.getString("CodigoEjemplar"));
                 setCodigoPrestamo(resultSet.getString("CodigoPrestamo"));
-                Prestamo prestamo = new Prestamo();
+                Prestamo prestamo = new Prestamo(getId(),getIdUsuario(),getFechaPrestamo(),getFechaDevolucion(),getFechaDevolucionReal(),getMora(),getCodigoEjemplar());
                 prestamos.add(prestamo);
             }
         } catch (SQLException e) {
@@ -366,7 +372,7 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
                 setMora(resultSet.getFloat("Mora"));
                 setCodigoEjemplar(resultSet.getString("CodigoEjemplar"));
                 setCodigoPrestamo(resultSet.getString("CodigoPrestamo"));
-                Prestamo prestamo = new Prestamo();
+                Prestamo prestamo = new Prestamo(getId(),getIdUsuario(),getFechaPrestamo(),getFechaDevolucion(),getFechaDevolucionReal(),getMora(),getCodigoEjemplar());
                 prestamos.add(prestamo);
             }
         } catch (SQLException e) {
@@ -394,7 +400,7 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
                 setMora(resultSet.getFloat("Mora"));
                 setCodigoEjemplar(resultSet.getString("CodigoEjemplar"));
                 setCodigoPrestamo(resultSet.getString("CodigoPrestamo"));
-                Prestamo prestamo = new Prestamo();
+                Prestamo prestamo = new Prestamo(getId(),getIdUsuario(),getFechaPrestamo(),getFechaDevolucion(),getFechaDevolucionReal(),getMora(),getCodigoEjemplar());
                 prestamos.add(prestamo);
             }
         } catch (SQLException e) {
@@ -421,7 +427,7 @@ String update_revistas_stock = "UPDATE Revistas SET Stock = Stock + ? WHERE Codi
                 setMora(resultSet.getFloat("Mora"));
                 setCodigoEjemplar(resultSet.getString("CodigoEjemplar"));
                 setCodigoPrestamo(resultSet.getString("CodigoPrestamo"));
-                Prestamo prestamo = new Prestamo();
+                Prestamo prestamo = new Prestamo(getId(),getIdUsuario(),getFechaPrestamo(),getFechaDevolucion(),getFechaDevolucionReal(),getMora(),getCodigoEjemplar());
                 prestamos.add(prestamo);
             }
         } catch (SQLException e) {

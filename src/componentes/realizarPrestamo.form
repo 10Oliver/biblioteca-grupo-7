@@ -94,7 +94,7 @@
                       <Component id="lblUsuario" min="-2" max="-2" attributes="0"/>
                       <Component id="txtFechaEntrega" alignment="0" min="-2" pref="400" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="txtUsuario" min="-2" pref="300" max="-2" attributes="0"/>
+                          <Component id="txtNombreUsuario" min="-2" pref="300" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="btnBuscarUsuario" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -110,7 +110,7 @@
                   <Component id="lblUsuario" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="txtUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtNombreUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btnBuscarUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
@@ -133,7 +133,7 @@
             <Property name="text" type="java.lang.String" value="Ingresa el nombre del usuario:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="txtUsuario">
+        <Component class="javax.swing.JTextField" name="txtNombreUsuario">
         </Component>
         <Component class="javax.swing.JLabel" name="lblFechaEntrega">
           <Properties>
@@ -236,6 +236,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Buscar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarProductoActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -279,6 +282,9 @@
               <Dimension value="[250, 50]"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRegistrarPrestamoActionPerformed"/>
+          </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
               <GridBagConstraints gridX="-1" gridY="-1" gridWidth="1" gridHeight="1" fill="0" ipadX="0" ipadY="0" insetsTop="0" insetsLeft="0" insetsBottom="0" insetsRight="0" anchor="10" weightX="0.0" weightY="0.0"/>
